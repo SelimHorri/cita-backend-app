@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerRequestExtractorUtil implements UserRequestExtractorUtil {
+class CustomerRequestExtractorUtil implements UserRequestExtractorUtil {
 	
 	private final JwtUtils jwtUtils;
 	

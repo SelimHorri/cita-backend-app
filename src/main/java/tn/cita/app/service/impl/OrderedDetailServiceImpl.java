@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class OrderedDetailServiceImpl implements OrderedDetailService {
+class OrderedDetailServiceImpl implements OrderedDetailService {
 	
 	private final OrderedDetailRepository orderedDetailRepository;
 	

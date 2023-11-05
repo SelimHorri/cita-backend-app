@@ -21,7 +21,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CategoryServiceImpl implements CategoryService {
+class CategoryServiceImpl implements CategoryService {
 	
 	private final CategoryRepository categoryRepository;
 	private final SaloonRepository saloonRepository;

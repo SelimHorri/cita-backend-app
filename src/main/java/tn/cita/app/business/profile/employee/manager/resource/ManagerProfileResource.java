@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -28,17 +27,16 @@ public class ManagerProfileResource {
 	@GetMapping
 	public ResponseEntity<ApiResponse<ManagerProfileResponse>> fetchProfile(final WebRequest webRequest) {
 		log.info("** Fetch manager profile info.. *\n");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono( 
 				this.managerProfileService.fetchProfile(this.userRequestExtractorUtil.extractUsername(webRequest))));
 	}
 	
 	@PutMapping
-	public ResponseEntity<ApiResponse<EmployeeDto>> updateProfileInfo(final WebRequest webRequest, 
-			@RequestBody @Valid final ManagerProfileRequest managerProfileRequest) {
+	public ResponseEntity<ApiResponse<EmployeeDto>> updateProfileInfo(
+					final WebRequest webRequest, @RequestBody @Valid final ManagerProfileRequest managerProfileRequest) {
 		log.info("** Update manager profile info.. *\n");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
-				this.managerProfileService.updateProfileInfo(managerProfileRequest)));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(this.managerProfileService.updateProfileInfo(managerProfileRequest)));
 	}
 	
 }

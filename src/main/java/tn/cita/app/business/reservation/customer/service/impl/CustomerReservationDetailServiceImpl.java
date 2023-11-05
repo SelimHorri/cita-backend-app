@@ -22,7 +22,7 @@ import tn.cita.app.util.StringWrapperUtils;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerReservationDetailServiceImpl implements CustomerReservationDetailService {
+class CustomerReservationDetailServiceImpl implements CustomerReservationDetailService {
 	
 	private final ReservationRepository reservationRepository;
 	private final OrderedDetailRepository orderedDetailRepository;

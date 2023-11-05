@@ -13,8 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tn.cita.app.exception.wrapper.ActuatorHealthException;
 import tn.cita.app.model.dto.response.api.ApiResponse;
 
-import java.io.Serializable;
-
 @RestController
 @RequestMapping("${app.api-version}" + "/actuator")
 @Slf4j
@@ -48,13 +46,12 @@ public class ActuatorLiveness {
 		if (health == null || !health.status().equalsIgnoreCase("UP"))
 			throw healthException;
 		
-		// return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, health));
-		return ResponseEntity.ok(ApiResponse.ofSuccessfulMono(health));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(health));
 	}
 	
+	record HealthActuatorResponse(String status, String[] groups) {}
+	
 }
-
-record HealthActuatorResponse(String status, String[] groups) implements Serializable {}
 
 
 

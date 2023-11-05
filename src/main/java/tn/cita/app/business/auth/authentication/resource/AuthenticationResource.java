@@ -3,7 +3,6 @@ package tn.cita.app.business.auth.authentication.resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +24,7 @@ public class AuthenticationResource {
 	@PostMapping
 	public ResponseEntity<ApiResponse<LoginResponse>> authenticate(@RequestBody @Valid final LoginRequest loginRequest) {
 		log.info("** Authenticate user...*");
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new ApiResponse<>(1, HttpStatus.OK, true, 
-						this.authenticationService.authenticate(loginRequest)));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(this.authenticationService.authenticate(loginRequest)));
 	}
 	
 }

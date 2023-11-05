@@ -15,7 +15,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class RatingServiceImpl implements RatingService {
+class RatingServiceImpl implements RatingService {
 	
 	private final RatingRepository ratingRepository;
 	

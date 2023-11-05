@@ -21,7 +21,7 @@ import tn.cita.app.service.TaskService;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class WorkerProfileServiceImpl implements WorkerProfileService {
+class WorkerProfileServiceImpl implements WorkerProfileService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final TaskService taskRepository;

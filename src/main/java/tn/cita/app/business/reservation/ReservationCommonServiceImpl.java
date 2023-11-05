@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ReservationCommonServiceImpl implements ReservationCommonService {
+class ReservationCommonServiceImpl implements ReservationCommonService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final ReservationRepository reservationRepository;

@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class RegistrationServiceImpl implements RegistrationService {
+class RegistrationServiceImpl implements RegistrationService {
 	
 	private final CredentialRepository credentialRepository;
 	private final VerificationTokenRepository verificationTokenRepository;

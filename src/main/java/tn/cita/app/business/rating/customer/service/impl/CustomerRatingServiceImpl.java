@@ -17,7 +17,7 @@ import tn.cita.app.repository.RatingRepository;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerRatingServiceImpl implements CustomerRatingService {
+class CustomerRatingServiceImpl implements CustomerRatingService {
 	
 	private final CustomerRepository customerRepository;
 	private final RatingRepository ratingRepository;

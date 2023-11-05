@@ -21,7 +21,7 @@ import tn.cita.app.util.ClientPageRequestUtils;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class WorkerReservationServiceImpl implements WorkerReservationService {
+class WorkerReservationServiceImpl implements WorkerReservationService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final TaskRepository taskRepository;

@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record ApiResponse<T>(
-		
 		@JsonFormat(shape = Shape.STRING)
 		@JsonSerialize(using = InstantSerializer.class)
 		@JsonDeserialize(using = InstantDeserializer.class)
@@ -37,20 +36,28 @@ public record ApiResponse<T>(
 		this(Instant.now(), totalResult, httpStatus, acknowledge, responseBody);
 	}
 	
-	public static <T> ApiResponse<T> ofSuccessfulMono(final T responseBody) {
+	public static <T> ApiResponse<T> of2xxMono(final T responseBody) {
 		return new ApiResponse<>(1, HttpStatus.OK, true, responseBody);
 	}
 	
-	public static <T> ApiResponse<T> ofFailureMono(final T responseBody) {
-		return new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false, responseBody);
-	}
-	
-	public static <T> ApiResponse<T> ofSuccessfulPoly(final Integer totalResult, final T responseBody) {
+	public static <T> ApiResponse<T> of2xxPoly(final int totalResult, final T responseBody) {
 		return new ApiResponse<>(totalResult, HttpStatus.OK, true, responseBody);
 	}
 	
-	public static <T> ApiResponse<T> ofFailurePoly(final Integer totalResult, final T responseBody) {
+	public static <T> ApiResponse<T> of4xxMono(final T responseBody) {
+		return new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false, responseBody);
+	}
+	
+	public static <T> ApiResponse<T> of4xxPoly(final int totalResult, final T responseBody) {
 		return new ApiResponse<>(totalResult, HttpStatus.BAD_REQUEST, false, responseBody);
+	}
+	
+	public static <T> ApiResponse<T> of5xxMono(final T responseBody) {
+		return new ApiResponse<>(1, HttpStatus.INTERNAL_SERVER_ERROR, false, responseBody);
+	}
+	
+	public static <T> ApiResponse<T> of5xxPoly(final int totalResult, final T responseBody) {
+		return new ApiResponse<>(totalResult, HttpStatus.INTERNAL_SERVER_ERROR, false, responseBody);
 	}
 	
 }

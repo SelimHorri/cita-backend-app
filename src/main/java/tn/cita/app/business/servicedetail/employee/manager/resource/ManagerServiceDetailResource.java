@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -28,16 +27,16 @@ public class ManagerServiceDetailResource {
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<ServiceDetailDto>>> fetchAll(final WebRequest webRequest) {
 		log.info("** Fetch all service details by manager.. *");
-		return ResponseEntity.ok(new ApiResponse<>(0, HttpStatus.OK, true, 
-				this.managerServiceDetailService.fetchAll(this.userRequestExtractorUtil.extractUsername(webRequest))));
+		final var serviceDetailsDtos = this.managerServiceDetailService.fetchAll(
+				this.userRequestExtractorUtil.extractUsername(webRequest));
+		return ResponseEntity.ok(ApiResponse.of2xxPoly(serviceDetailsDtos.getSize(), serviceDetailsDtos));
 	}
 	
 	@GetMapping("/{serviceDetailId}")
-	public ResponseEntity<ApiResponse<ServiceDetailDto>> fetchById(
-			final WebRequest webRequest, @PathVariable final String serviceDetailId) {
+	public ResponseEntity<ApiResponse<ServiceDetailDto>> fetchById(final WebRequest webRequest, @PathVariable final String serviceDetailId) {
 		log.info("** Fetch service detail by id by manager.. *");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerServiceDetailService.fetchById(Integer.parseInt(serviceDetailId))));
 	}
 	
@@ -46,7 +45,7 @@ public class ManagerServiceDetailResource {
 			final WebRequest webRequest, @RequestBody @Valid final ServiceDetailRequest serviceDetailRequest) {
 		log.info("** Save service detail by manager.. *");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerServiceDetailService.saveServiceDetail(serviceDetailRequest)));
 	}
 	
@@ -55,7 +54,7 @@ public class ManagerServiceDetailResource {
 			final WebRequest webRequest, @RequestBody @Valid final ServiceDetailRequest serviceDetailRequest) {
 		log.info("** Update service detail by manager.. *");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerServiceDetailService.updateServiceDetail(serviceDetailRequest)));
 	}
 	
@@ -63,7 +62,7 @@ public class ManagerServiceDetailResource {
 	public ResponseEntity<ApiResponse<Boolean>> deleteServiceDetail(final WebRequest webRequest, @PathVariable final String serviceDetailId) {
 		log.info("** Delete service detail by manager.. *");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerServiceDetailService.deleteServiceDetail(Integer.parseInt(serviceDetailId))));
 	}
 	

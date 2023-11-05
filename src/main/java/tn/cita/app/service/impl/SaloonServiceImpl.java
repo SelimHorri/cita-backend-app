@@ -18,7 +18,7 @@ import tn.cita.app.service.SaloonService;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class SaloonServiceImpl implements SaloonService {
+class SaloonServiceImpl implements SaloonService {
 	
 	private final SaloonRepository saloonRepository;
 	

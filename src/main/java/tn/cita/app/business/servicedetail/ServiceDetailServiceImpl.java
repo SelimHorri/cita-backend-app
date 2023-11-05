@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ServiceDetailServiceImpl implements ServiceDetailService {
+class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	private final ServiceDetailRepository serviceDetailRepository;
 	private final OrderedDetailRepository orderedDetailRepository;

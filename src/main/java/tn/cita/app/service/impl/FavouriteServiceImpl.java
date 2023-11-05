@@ -18,7 +18,7 @@ import tn.cita.app.util.ClientPageRequestUtils;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class FavouriteServiceImpl implements FavouriteService {
+class FavouriteServiceImpl implements FavouriteService {
 	
 	private final FavouriteRepository favouriteRepository;
 	

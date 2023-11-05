@@ -3,7 +3,6 @@ package tn.cita.app.business.reservation.employee.worker.resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +25,11 @@ public class WorkerReservationDetailResource {
 	private final WorkerReservationDetailService workerReservationDetailService;
 	
 	@GetMapping("/{reservationId}")
-	public ResponseEntity<ApiResponse<ReservationDetailResponse>> fetchReservationDetails(final WebRequest request,
-			@PathVariable final String reservationId) {
+	public ResponseEntity<ApiResponse<ReservationDetailResponse>> fetchReservationDetails(
+					final WebRequest request, @PathVariable final String reservationId) {
 		log.info("** Fetch worker reservation details.. *");
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.workerReservationDetailService.fetchReservationDetails(Integer.parseInt(reservationId))));
 	}
 	

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ManagerProfileServiceImpl implements ManagerProfileService {
+class ManagerProfileServiceImpl implements ManagerProfileService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final PasswordEncoder passwordEncoder;

@@ -2,7 +2,6 @@ package tn.cita.app.business.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,15 +21,13 @@ public class CredentialResource {
 	@GetMapping("/identifier/{identifier}")
 	public ResponseEntity<ApiResponse<CredentialDto>> findByIdentifier(@PathVariable final String identifier) {
 		log.info("** Find by identifier.. *");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
-				this.credentialService.findByIdentifier(identifier.strip())));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(this.credentialService.findByIdentifier(identifier.strip())));
 	}
 	
 	@GetMapping("/username/{username}")
 	public ResponseEntity<ApiResponse<CredentialDto>> findByUsername(@PathVariable final String username) {
 		log.info("** Find by username.. *");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
-				this.credentialService.findByUsername(username)));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(this.credentialService.findByUsername(username)));
 	}
 	
 }

@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ReservationServiceImpl implements ReservationService {
+class ReservationServiceImpl implements ReservationService {
 	
 	private final ReservationRepository reservationRepository;
 	

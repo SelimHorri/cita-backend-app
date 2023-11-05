@@ -25,7 +25,7 @@ import java.util.Comparator;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
+class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final ServiceDetailRepository serviceDetailRepository;

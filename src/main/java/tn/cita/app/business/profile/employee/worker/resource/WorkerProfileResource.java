@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -28,7 +27,7 @@ public class WorkerProfileResource {
 	@GetMapping
 	public ResponseEntity<ApiResponse<WorkerProfileResponse>> fetchProfile(final WebRequest webRequest) {
 		log.info("** Fetch worker profile info.. *\n");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono( 
 				this.workerProfileService.fetchProfile(this.userRequestExtractorUtil.extractUsername(webRequest))));
 	}
 	
@@ -37,8 +36,7 @@ public class WorkerProfileResource {
 			@RequestBody @Valid final WorkerProfileRequest workerProfileRequest) {
 		log.info("** Update worker profile info.. *\n");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
-				this.workerProfileService.updateProfileInfo(workerProfileRequest)));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(this.workerProfileService.updateProfileInfo(workerProfileRequest)));
 	}
 	
 }

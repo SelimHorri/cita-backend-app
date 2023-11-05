@@ -28,7 +28,7 @@ import java.util.Comparator;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ManagerReservationDetailServiceImpl implements ManagerReservationDetailService {
+class ManagerReservationDetailServiceImpl implements ManagerReservationDetailService {
 	
 	private final ReservationRepository reservationRepository;
 	private final ReservationCommonService reservationCommonService;

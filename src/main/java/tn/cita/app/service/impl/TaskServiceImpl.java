@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService {
+class TaskServiceImpl implements TaskService {
 	
 	private final TaskRepository taskRepository;
 	

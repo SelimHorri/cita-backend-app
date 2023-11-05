@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class LocationServiceImpl implements LocationService {
+class LocationServiceImpl implements LocationService {
 	
 	private final LocationRepository locationRepository;
 	

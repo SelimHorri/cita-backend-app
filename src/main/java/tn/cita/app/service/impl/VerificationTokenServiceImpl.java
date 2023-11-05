@@ -14,7 +14,7 @@ import tn.cita.app.service.VerificationTokenService;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class VerificationTokenServiceImpl implements VerificationTokenService {
+class VerificationTokenServiceImpl implements VerificationTokenService {
 	
 	private final VerificationTokenRepository verificationTokenRepository;
 	

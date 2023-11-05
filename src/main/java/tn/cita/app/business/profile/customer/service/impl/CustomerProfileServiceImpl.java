@@ -29,7 +29,7 @@ import tn.cita.app.util.ClientPageRequestUtils;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerProfileServiceImpl implements CustomerProfileService {
+class CustomerProfileServiceImpl implements CustomerProfileService {
 	
 	private final CustomerRepository customerRepository;
 	private final ReservationRepository reservationRepository;

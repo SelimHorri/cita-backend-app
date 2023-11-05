@@ -17,7 +17,7 @@ import tn.cita.app.service.TagService;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class TagServiceImpl implements TagService {
+class TagServiceImpl implements TagService {
 	
 	private final TagRepository tagRepository;
 	

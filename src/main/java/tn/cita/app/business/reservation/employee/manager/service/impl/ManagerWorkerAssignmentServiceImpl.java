@@ -20,7 +20,7 @@ import tn.cita.app.util.ClientPageRequestUtils;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ManagerWorkerAssignmentServiceImpl implements ManagerWorkerAssignmentService {
+class ManagerWorkerAssignmentServiceImpl implements ManagerWorkerAssignmentService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final TaskRepository taskRepository;

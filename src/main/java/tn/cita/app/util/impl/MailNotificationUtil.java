@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class MailNotificationUtil implements NotificationUtil {
+class MailNotificationUtil implements NotificationUtil {
 	
 	private final JavaMailSender javaMailSender;
 	private final MailContentBuilder mailContentBuilder;

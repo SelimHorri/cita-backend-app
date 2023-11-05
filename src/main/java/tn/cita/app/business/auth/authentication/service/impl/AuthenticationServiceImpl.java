@@ -18,7 +18,7 @@ import tn.cita.app.util.JwtUtils;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService {
+class AuthenticationServiceImpl implements AuthenticationService {
 	
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;

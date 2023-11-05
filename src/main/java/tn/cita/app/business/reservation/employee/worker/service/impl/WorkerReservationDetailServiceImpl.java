@@ -19,7 +19,7 @@ import tn.cita.app.repository.TaskRepository;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class WorkerReservationDetailServiceImpl implements WorkerReservationDetailService {
+class WorkerReservationDetailServiceImpl implements WorkerReservationDetailService {
 	
 	private final TaskRepository taskRepository;
 	private final ReservationRepository reservationRepository;

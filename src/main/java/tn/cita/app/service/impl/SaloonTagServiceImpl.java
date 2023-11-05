@@ -15,7 +15,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class SaloonTagServiceImpl implements SaloonTagService {
+class SaloonTagServiceImpl implements SaloonTagService {
 	
 	private final SaloonTagRepository saloonTagRepository;
 	

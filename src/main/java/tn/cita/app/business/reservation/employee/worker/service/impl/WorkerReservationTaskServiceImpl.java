@@ -27,7 +27,7 @@ import java.util.Objects;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class WorkerReservationTaskServiceImpl implements WorkerReservationTaskService {
+class WorkerReservationTaskServiceImpl implements WorkerReservationTaskService {
 	
 	private final EmployeeRepository employeeRepository;
 	private final TaskRepository taskRepository;

@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -29,22 +28,21 @@ public class CustomerProfileResource {
 	private final CustomerProfileService customerProfileService;
 	
 	@GetMapping
-	public ResponseEntity<ApiResponse<CustomerProfileResponse>> fetchProfile(final WebRequest request, 
-			@RequestParam final Map<String, String> params) {
+	public ResponseEntity<ApiResponse<CustomerProfileResponse>> fetchProfile(
+					final WebRequest request, @RequestParam final Map<String, String> params) {
 		log.info("** Fetch customer profile info.. *\n");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono( 
 				this.customerProfileService.fetchProfile(
 						this.userRequestExtractorUtil.extractUsername(request),
 						ClientPageRequest.from(params))));
 	}
 	
 	@PutMapping
-	public ResponseEntity<ApiResponse<CustomerDto>> updateProfileInfo(final WebRequest webRequest, 
-			@RequestBody @Valid final CustomerProfileRequest customerProfileRequest) {
+	public ResponseEntity<ApiResponse<CustomerDto>> updateProfileInfo(
+					final WebRequest webRequest, @RequestBody @Valid final CustomerProfileRequest customerProfileRequest) {
 		log.info("** Update customer profile info.. *\n");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
-				this.customerProfileService.updateProfileInfo(customerProfileRequest)));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(this.customerProfileService.updateProfileInfo(customerProfileRequest)));
 	}
 	
 }

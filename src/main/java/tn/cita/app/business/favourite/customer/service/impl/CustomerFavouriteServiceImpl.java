@@ -27,7 +27,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerFavouriteServiceImpl implements CustomerFavouriteService {
+class CustomerFavouriteServiceImpl implements CustomerFavouriteService {
 	
 	private final CustomerRepository customerRepository;
 	private final FavouriteRepository favouriteRepository;

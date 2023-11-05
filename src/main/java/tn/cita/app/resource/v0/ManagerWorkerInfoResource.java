@@ -3,7 +3,6 @@ package tn.cita.app.resource.v0;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,16 +28,16 @@ public class ManagerWorkerInfoResource {
 	@GetMapping
 	public ResponseEntity<ApiResponse<ManagerWorkerInfoResponse>> fetchAllSubWorkers(final WebRequest webRequest) {
 		log.info("** Fetch all sub workers by manager.. *");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true,
-				this.managerWorkerInfoService.fetchAllSubWorkers(this.userRequestExtractorUtil.extractUsername(webRequest))));
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
+				this.managerWorkerInfoService.fetchAllSubWorkers(
+						this.userRequestExtractorUtil.extractUsername(webRequest))));
 	}
 	
 	@GetMapping("/{workerId}")
-	public ResponseEntity<ApiResponse<EmployeeDto>> fetchWorkerInfo(final WebRequest webRequest, 
-			@PathVariable final String workerId) {
+	public ResponseEntity<ApiResponse<EmployeeDto>> fetchWorkerInfo(final WebRequest webRequest, @PathVariable final String workerId) {
 		log.info("** Fetch worker info by manager.. *");
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerWorkerInfoService.fetchWorkerInfo(Integer.parseInt(workerId))));
 	}
 	

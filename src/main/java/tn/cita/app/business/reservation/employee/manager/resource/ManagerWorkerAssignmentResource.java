@@ -3,7 +3,6 @@ package tn.cita.app.business.reservation.employee.manager.resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -27,9 +26,11 @@ public class ManagerWorkerAssignmentResource {
 	
 	@GetMapping("/{workerId}")
 	public ResponseEntity<ApiResponse<ManagerWorkerAssignmentResponse>> fetchAllWorkerTasks(
-			final WebRequest webRequest, @PathVariable final String workerId, @RequestParam final Map<String, String> params) {
+					final WebRequest webRequest, 
+					@PathVariable final String workerId, 
+					@RequestParam final Map<String, String> params) {
 		log.info("** Fetch all worker tasks by manager.. *");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true,
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerWorkerAssignmentService.fetchAllWorkerTasks(
 						this.userRequestExtractorUtil.extractUsername(webRequest),
 						Integer.parseInt(workerId),
@@ -38,9 +39,11 @@ public class ManagerWorkerAssignmentResource {
 	
 	@GetMapping("/{workerId}/search/{key}")
 	public ResponseEntity<ApiResponse<ManagerWorkerAssignmentResponse>> searchAllReservationsLikeKey(
-			final WebRequest webRequest, @PathVariable final String workerId, @PathVariable final String key) {
+					final WebRequest webRequest, 
+					@PathVariable final String workerId, 
+					@PathVariable final String key) {
 		log.info("** Search all reservations like key by manager.. *");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true,
+		return ResponseEntity.ok(ApiResponse.of2xxMono(
 				this.managerWorkerAssignmentService.searchAllLikeKey(
 						this.userRequestExtractorUtil.extractUsername(webRequest),
 						Integer.parseInt(workerId),

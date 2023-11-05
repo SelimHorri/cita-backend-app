@@ -37,7 +37,7 @@ import java.util.Comparator;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerReservationServiceImpl implements CustomerReservationService {
+class CustomerReservationServiceImpl implements CustomerReservationService {
 	
 	private final CustomerRepository customerRepository;
 	private final ReservationRepository reservationRepository;

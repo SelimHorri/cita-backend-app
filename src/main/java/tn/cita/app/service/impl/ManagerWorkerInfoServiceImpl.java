@@ -16,7 +16,7 @@ import tn.cita.app.service.ManagerWorkerInfoService;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class ManagerWorkerInfoServiceImpl implements ManagerWorkerInfoService {
+class ManagerWorkerInfoServiceImpl implements ManagerWorkerInfoService {
 	
 	private final EmployeeRepository employeeRepository;
 	

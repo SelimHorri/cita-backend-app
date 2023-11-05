@@ -3,7 +3,6 @@ package tn.cita.app.business.rating.customer.resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +26,7 @@ public class CustomerRatingResource {
 	@GetMapping
 	public ResponseEntity<ApiResponse<CustomerRatingResponse>> fetchAllRatings(final WebRequest request) {
 		log.info("** Fetch all customer ratings.. *\n");
-		return ResponseEntity.ok(new ApiResponse<>(1, HttpStatus.OK, true, 
+		return ResponseEntity.ok(ApiResponse.of2xxMono( 
 				this.customerRatingService.fetchAllRatings(this.userRequestExtractorUtil.extractUsername(request))));
 	}
 	

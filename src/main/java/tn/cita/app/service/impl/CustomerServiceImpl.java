@@ -19,7 +19,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerServiceImpl implements CustomerService {
+class CustomerServiceImpl implements CustomerService {
 	
 	private final CustomerRepository customerRepository;
 	
