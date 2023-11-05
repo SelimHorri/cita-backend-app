@@ -5,14 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import tn.cita.app.exception.payload.ExceptionMsg;
-import tn.cita.app.exception.wrapper.ActuatorHealthException;
 import tn.cita.app.exception.wrapper.BusinessException;
 import tn.cita.app.model.dto.response.api.ApiResponse;
 
@@ -40,14 +37,9 @@ public class ApiExceptionHandler {
 	
 	@ExceptionHandler(value = {
 		BusinessException.class,
-		BadCredentialsException.class,
-		IllegalStateException.class,
-		DisabledException.class,
-		NumberFormatException.class,
-		// UnauthorizedUserException.class, // already works for filter using resolver
-		ActuatorHealthException.class,
+		RuntimeException.class
 	})
-	public <T extends RuntimeException> ResponseEntity<ApiResponse<ExceptionMsg>> handleApiRequestException(final T e) {
+	public <T extends BusinessException> ResponseEntity<ApiResponse<ExceptionMsg>> handleBusinessException(final T e) {
 		log.info("** Handle API request custom exception.. *");
 		
 		final var httpStatus = HttpStatus.BAD_REQUEST;
