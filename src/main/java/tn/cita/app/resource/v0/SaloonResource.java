@@ -1,9 +1,8 @@
 package tn.cita.app.resource.v0;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.cita.app.model.dto.SaloonDto;
 import tn.cita.app.model.dto.request.ClientPageRequest;
@@ -14,48 +13,46 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/saloons")
-@Slf4j
 @RequiredArgsConstructor
-public class SaloonResource {
+class SaloonResource {
 	
 	private final SaloonService saloonService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public ResponseEntity<ApiResponse<Page<SaloonDto>>> findAll(@RequestParam final Map<String, String> params) {
-		log.info("** Find all saloons.. *");
-		final var saloons = this.saloonService.findAll(ClientPageRequest.from(params));
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(saloons.getSize(), saloons));
+	ApiResponse<Page<SaloonDto>> findAll(@RequestParam Map<String, String> params) {
+		var saloons = this.saloonService.findAll(ClientPageRequest.from(params));
+		return ApiResponse.of(saloons.getSize(), saloons);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/locations/state/{state}")
-	public ResponseEntity<ApiResponse<Page<SaloonDto>>> findAllByLocationState(
-					@PathVariable final String state, @RequestParam final Map<String, String> params) {
-		log.info("** Find all saloons by location state.. *");
-		final var saloons = this.saloonService.findAllByLocationState(state, ClientPageRequest.from(params));
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(saloons.getSize(), saloons));
+	ApiResponse<Page<SaloonDto>> findAllByLocationState(
+					@PathVariable String state, @RequestParam Map<String, String> params) {
+		var saloons = this.saloonService.findAllByLocationState(state, ClientPageRequest.from(params));
+		return ApiResponse.of(saloons.getSize(), saloons);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<SaloonDto>> findById(@PathVariable final String id) {
-		log.info("** Find by id.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.saloonService.findById(Integer.parseInt(id))));
+	ApiResponse<SaloonDto> findById(@PathVariable String id) {
+		return ApiResponse.of(this.saloonService.findById(Integer.parseInt(id)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/identifier/{identifier}")
-	public ResponseEntity<ApiResponse<SaloonDto>> findByIdentifier(@PathVariable final String identifier) {
-		log.info("** Find by identifier.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.saloonService.findByIdentifier(identifier.strip())));
+	ApiResponse<SaloonDto> findByIdentifier(@PathVariable String identifier) {
+		return ApiResponse.of(this.saloonService.findByIdentifier(identifier.strip()));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/code/{code}")
-	public ResponseEntity<ApiResponse<Page<SaloonDto>>> findAllByCode(@PathVariable final String code) {
-		log.info("** Find all salonns by code.. *");
-		final var saloons = this.saloonService.findAllByCode(code);
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(saloons.getSize(), saloons));
+	ApiResponse<Page<SaloonDto>> findAllByCode(@PathVariable String code) {
+		var saloons = this.saloonService.findAllByCode(code);
+		return ApiResponse.of(saloons.getSize(), saloons);
 	}
 	
 }
-
 
 
 

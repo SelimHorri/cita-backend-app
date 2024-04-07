@@ -1,9 +1,8 @@
 package tn.cita.app.resource.v0;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.cita.app.model.dto.TagDto;
 import tn.cita.app.model.dto.request.ClientPageRequest;
@@ -14,29 +13,28 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/tags")
-@Slf4j
 @RequiredArgsConstructor
-public class TagResource {
+class TagResource {
 	
 	private final TagService tagService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public ResponseEntity<ApiResponse<Page<TagDto>>> findAll(@RequestParam final Map<String, String> params) {
-		log.info("** Find all tags.. *");
-		final var tags = this.tagService.findAll(ClientPageRequest.from(params));
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(tags.getSize(), tags));
+	ApiResponse<Page<TagDto>> findAll(@RequestParam Map<String, String> params) {
+		var tags = this.tagService.findAll(ClientPageRequest.from(params));
+		return ApiResponse.of(tags.getSize(), tags);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<TagDto>> findById(@PathVariable final String id) {
-		log.info("** Find by id.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.tagService.findById(Integer.parseInt(id))));
+	ApiResponse<TagDto> findById(@PathVariable String id) {
+		return ApiResponse.of(this.tagService.findById(Integer.parseInt(id)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/identifier/{identifier}")
-	public ResponseEntity<ApiResponse<TagDto>> findByIdentifier(@PathVariable final String identifier) {
-		log.info("** Find by identifier.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.tagService.findByIdentifier(identifier.strip())));
+	ApiResponse<TagDto> findByIdentifier(@PathVariable String identifier) {
+		return ApiResponse.of(this.tagService.findByIdentifier(identifier.strip()));
 	}
 	
 }

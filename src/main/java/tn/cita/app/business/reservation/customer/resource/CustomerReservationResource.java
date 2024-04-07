@@ -1,11 +1,9 @@
 package tn.cita.app.business.reservation.customer.resource;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.reservation.customer.model.CustomerReservationResponse;
@@ -20,47 +18,41 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/customers/reservations")
-@Slf4j
 @RequiredArgsConstructor
-public class CustomerReservationResource {
+class CustomerReservationResource {
 	
 	@Qualifier("customerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final CustomerReservationService customerReservationService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public ResponseEntity<ApiResponse<CustomerReservationResponse>> fetchAllReservations(
-					final WebRequest request, @RequestParam final Map<String, String> params) {
-		log.info("** Fetch all customer reservations.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.customerReservationService.fetchAllReservations(
-						this.userRequestExtractorUtil.extractUsername(request), ClientPageRequest.from(params))));
+	ApiResponse<CustomerReservationResponse> fetchAllReservations(WebRequest request, @RequestParam Map<String, String> params) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(request);
+		return ApiResponse.of(
+				this.customerReservationService.fetchAllReservations(extractUsername, ClientPageRequest.from(params)));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping("/cancel/{reservationId}")
-	public ResponseEntity<ApiResponse<ReservationDto>> cancelReservation(
-					final WebRequest request, @PathVariable final String reservationId) {
-		log.info("** Cancel customer reservation.. *");
+	ApiResponse<ReservationDto> cancelReservation(WebRequest request, @PathVariable String reservationId) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.customerReservationService.cancelReservation(Integer.parseInt(reservationId))));
+		return ApiResponse.of(this.customerReservationService.cancelReservation(Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public ResponseEntity<ApiResponse<ReservationDto>> createReservation(
-					final WebRequest request, @RequestBody @NotNull @Valid final ReservationRequest reservationRequest) {
-		log.info("** Create customer reservation.. *");
+	ApiResponse<ReservationDto> createReservation(WebRequest request,
+												  @RequestBody @Valid ReservationRequest reservationRequest) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.customerReservationService.createReservation(reservationRequest)));
+		return ApiResponse.of(this.customerReservationService.createReservation(reservationRequest));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/search/{key}")
-	public ResponseEntity<ApiResponse<CustomerReservationResponse>> searchAllBySaloonIdLikeKey(
-					final WebRequest webRequest, @PathVariable final String key) {
-		log.info("** Search all customer reservations by saloonId like key.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.customerReservationService.searchAllByCustomerIdLikeKey(
-						this.userRequestExtractorUtil.extractUsername(webRequest), key)));
+	ApiResponse<CustomerReservationResponse> searchAllBySaloonIdLikeKey(WebRequest webRequest, @PathVariable String key) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(this.customerReservationService.searchAllByCustomerIdLikeKey(extractUsername, key));
 	}
 	
 }

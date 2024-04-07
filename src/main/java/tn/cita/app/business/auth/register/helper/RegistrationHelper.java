@@ -41,7 +41,7 @@ public class RegistrationHelper {
 	private final PasswordEncoder passwordEncoder;
 	
 	public RegisterResponse registerCustomer(final RegisterRequest registerRequest) {
-		log.info("** Register Customer process... ! *");
+		log.info("Register Customer process... ! ");
 		
 		final var savedCustomer = this.customerRepository
 				.save(Customer.builder()
@@ -63,14 +63,14 @@ public class RegistrationHelper {
 										.isCredentialsNonExpired(true)
 										.build())
 						.build());
-		log.info("** Customer saved successfully! *");
+		log.info("Customer saved successfully! ");
 		
 		return this.sendAccountValidation(savedCustomer.getCredential(),
 				ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{token}"));
 	}
 	
 	public RegisterResponse registerEmployee(final RegisterRequest registerRequest) {
-		log.info("** Register Employee process... ! *");
+		log.info("Register Employee process... ! ");
 		
 		final var savedEmployee = this.employeeRepository
 				.save(Employee.builder()
@@ -92,7 +92,7 @@ public class RegistrationHelper {
 										.isCredentialsNonExpired(true)
 										.build())
 						.build());
-		log.info("** Employee saved successfully! *");
+		log.info("Employee saved successfully! ");
 		
 		return this.sendAccountValidation(savedEmployee.getCredential(),
 				ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{token}"));
@@ -104,7 +104,7 @@ public class RegistrationHelper {
 				LocalDateTime.now().plusMinutes(AppConstants.USER_EXPIRES_AFTER_MINUTES),
 				credential);
 		final var savedVerificationToken = this.verificationTokenRepository.save(verificationToken);
-		log.info("** Verification token saved successfully! *");
+		log.info("Verification token saved successfully! ");
 		
 		this.sendValidationMail(savedVerificationToken, uriBuilder);
 		
@@ -125,7 +125,7 @@ public class RegistrationHelper {
 					Map.of(
 							"username", verificationToken.getCredential().getUsername(),
 							"confirmLink", uriBuilder.build(verificationToken.getToken()).toString()));
-			log.info("** Mail sent successfully to: {}! *", verificationToken.getCredential().getCustomer().getEmail());
+			log.info("Mail sent successfully to: {}! ", verificationToken.getCredential().getCustomer().getEmail());
 		}
 		else {
 			this.mailNotificationUtil.sendHtmlMail(
@@ -135,7 +135,7 @@ public class RegistrationHelper {
 					Map.of(
 							"username", verificationToken.getCredential().getUsername(),
 							"confirmLink", uriBuilder.build(verificationToken.getToken()).toString()));
-			log.info("** Mail sent successfully to: {}! *", verificationToken.getCredential().getEmployee().getEmail());
+			log.info("Mail sent successfully to: {}! ", verificationToken.getCredential().getEmployee().getEmail());
 		}
 	}
 	

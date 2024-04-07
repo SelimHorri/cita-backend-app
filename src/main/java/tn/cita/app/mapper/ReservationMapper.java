@@ -1,12 +1,15 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Reservation;
 import tn.cita.app.model.dto.CustomerDto;
 import tn.cita.app.model.dto.ReservationDto;
 import tn.cita.app.model.dto.SaloonDto;
 
-public interface ReservationMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ReservationMapper {
 	
 	public static ReservationDto toDto(@NonNull final Reservation reservation) {
 		return ReservationDto.builder()

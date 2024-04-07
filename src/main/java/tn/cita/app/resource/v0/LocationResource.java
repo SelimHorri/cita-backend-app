@@ -1,9 +1,8 @@
 package tn.cita.app.resource.v0;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.cita.app.model.dto.LocationDto;
 import tn.cita.app.model.dto.request.ClientPageRequest;
@@ -15,41 +14,39 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/locations")
-@Slf4j
 @RequiredArgsConstructor
-public class LocationResource {
+class LocationResource {
 	
 	private final LocationService locationService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public ResponseEntity<ApiResponse<Page<LocationDto>>> findAll(@RequestParam final Map<String, String> params) {
-		log.info("** Find all paged locations.. *");
-		final var locations = this.locationService.findAll(ClientPageRequest.from(params));
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(locations.getSize(), locations));
+	ApiResponse<Page<LocationDto>> findAll(@RequestParam Map<String, String> params) {
+		var locations = this.locationService.findAll(ClientPageRequest.from(params));
+		return ApiResponse.of(locations.getSize(), locations);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<LocationDto>> findById(@PathVariable final String id) {
-		log.info("** Find location by id.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.locationService.findById(Integer.parseInt(id))));
+	ApiResponse<LocationDto> findById(@PathVariable String id) {
+		return ApiResponse.of(this.locationService.findById(Integer.parseInt(id)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/cities")
-	public ResponseEntity<ApiResponse<List<String>>> fetchAllCities() {
-		log.info("** Fetch all cities.. *");
-		final var cities = this.locationService.fetchAllCities();
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(cities.size(), cities));
+	ApiResponse<List<String>> fetchAllCities() {
+		var cities = this.locationService.fetchAllCities();
+		return ApiResponse.of(cities.size(), cities);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/states")
-	public ResponseEntity<ApiResponse<List<String>>> fetchAllStates() {
-		log.info("** Fetch all states.. *");
-		final var states = this.locationService.fetchAllStates();
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(states.size(), states));
+	ApiResponse<List<String>> fetchAllStates() {
+		var states = this.locationService.fetchAllStates();
+		return ApiResponse.of(states.size(), states);
 	}
 	
 }
-
 
 
 

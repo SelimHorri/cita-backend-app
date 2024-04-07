@@ -2,9 +2,8 @@ package tn.cita.app.business.profile.customer.resource;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.profile.customer.model.CustomerProfileRequest;
@@ -19,30 +18,28 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/customers/profile")
-@Slf4j
 @RequiredArgsConstructor
-public class CustomerProfileResource {
+class CustomerProfileResource {
 	
 	@Qualifier("customerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final CustomerProfileService customerProfileService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public ResponseEntity<ApiResponse<CustomerProfileResponse>> fetchProfile(
-					final WebRequest request, @RequestParam final Map<String, String> params) {
-		log.info("** Fetch customer profile info.. *\n");
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
+	ApiResponse<CustomerProfileResponse> fetchProfile(WebRequest request, @RequestParam Map<String, String> params) {
+		return ApiResponse.of( 
 				this.customerProfileService.fetchProfile(
 						this.userRequestExtractorUtil.extractUsername(request),
-						ClientPageRequest.from(params))));
+						ClientPageRequest.from(params)));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping
-	public ResponseEntity<ApiResponse<CustomerDto>> updateProfileInfo(
-					final WebRequest webRequest, @RequestBody @Valid final CustomerProfileRequest customerProfileRequest) {
-		log.info("** Update customer profile info.. *\n");
+	ApiResponse<CustomerDto> updateProfileInfo(WebRequest webRequest,
+											   @RequestBody @Valid CustomerProfileRequest customerProfileRequest) {
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.customerProfileService.updateProfileInfo(customerProfileRequest)));
+		return ApiResponse.of(this.customerProfileService.updateProfileInfo(customerProfileRequest));
 	}
 	
 }

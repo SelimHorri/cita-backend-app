@@ -1,9 +1,8 @@
 package tn.cita.app.business.favourite.customer.resource;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.favourite.customer.model.CustomerFavouriteResponse;
@@ -17,39 +16,38 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/customers/favourites")
-@Slf4j
 @RequiredArgsConstructor
-public class CustomerFavouriteResource {
+class CustomerFavouriteResource {
 	
 	@Qualifier("customerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final CustomerFavouriteService customerFavouriteService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public ResponseEntity<ApiResponse<CustomerFavouriteResponse>> fetchAllFavourites(
-					final WebRequest request, @RequestParam final Map<String, String> params) {
-		log.info("** Fetch all customer favourites.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
+	ApiResponse<CustomerFavouriteResponse> fetchAllFavourites(WebRequest request, @RequestParam Map<String, String> params) {
+		return ApiResponse.of(
 				this.customerFavouriteService.fetchAllFavourites(
 						this.userRequestExtractorUtil.extractUsername(request),
-						ClientPageRequest.from(params))));
+						ClientPageRequest.from(params)));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@DeleteMapping("/{saloonId}")
-	public ResponseEntity<ApiResponse<Boolean>> deleteFavourite(final WebRequest request, @PathVariable final String saloonId) {
-		log.info("** Delete customer favourite.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
+	ApiResponse<Boolean> deleteFavourite(WebRequest request, @PathVariable String saloonId) {
+		return ApiResponse.of(
 				this.customerFavouriteService.deleteFavourite(
 						this.userRequestExtractorUtil.extractUsername(request),
-						Integer.parseInt(saloonId))));
+						Integer.parseInt(saloonId)));
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public ResponseEntity<ApiResponse<FavouriteDto>> addFavourite(final WebRequest webRequest, @RequestParam final Integer saloonId) {
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
+	ApiResponse<FavouriteDto> addFavourite(WebRequest webRequest, @RequestParam Integer saloonId) {
+		return ApiResponse.of(
 				this.customerFavouriteService.addFavourite(
 						this.userRequestExtractorUtil.extractUsername(webRequest), 
-						saloonId)));
+						saloonId));
 	}
 	
 }

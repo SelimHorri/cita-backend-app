@@ -25,7 +25,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Page<EmployeeDto> findAll(final int pageOffset) {
-		log.info("** Find all employees offset paged..*");
+		log.info("Find all employees offset paged..");
 		return this.employeeRepository
 				.findAll(PageRequest.of(pageOffset - 1, AppConstants.PAGE_SIZE))
 				.map(EmployeeMapper::toDto);
@@ -33,7 +33,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public EmployeeDto findById(final Integer id) {
-		log.info("** Find employee by id..*");
+		log.info("Find employee by id..");
 		return this.employeeRepository.findById(id)
 				.map(EmployeeMapper::toDto)
 				.orElseThrow(EmployeeNotFoundException::new);
@@ -41,7 +41,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public EmployeeDto findByIdentifier(final String identifier) {
-		log.info("** Find employee by identifier.. *");
+		log.info("Find employee by identifier.. ");
 		return this.employeeRepository.findByIdentifier(identifier.strip())
 				.map(EmployeeMapper::toDto)
 				.orElseThrow(EmployeeNotFoundException::new);
@@ -49,7 +49,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public EmployeeDto findByCredentialUsername(final String username) {
-		log.info("** Find employee by credential username.. *");
+		log.info("Find employee by credential username.. ");
 		return this.employeeRepository.findByCredentialUsernameIgnoringCase(username)
 				.map(EmployeeMapper::toDto)
 				.orElseThrow(() -> new EmployeeNotFoundException(String
@@ -58,7 +58,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public List<EmployeeDto> findAllBySsn(final String ssn) {
-		log.info("** Find employee(s) by ssn.. *");
+		log.info("Find employee(s) by ssn.. ");
 		return this.employeeRepository
 				.findAllBySsn(ssn.strip()).stream()
 					.map(EmployeeMapper::toDto)
@@ -68,14 +68,14 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	@Override
 	public boolean deleteById(final Integer id) {
-		log.info("** Delete employee by id..*");
+		log.info("Delete employee by id..");
 		this.employeeRepository.deleteById(id);
 		return !this.employeeRepository.existsById(id);
 	}
 	
 	@Override
 	public List<EmployeeDto> findAllByManagerId(final Integer managerId) {
-		log.info("** Find all employees by managerId.. *");
+		log.info("Find all employees by managerId.. ");
 		return this.employeeRepository.findAllByManagerId(managerId).stream()
 				.map(EmployeeMapper::toDto)
 				.toList();

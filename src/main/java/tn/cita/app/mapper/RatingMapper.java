@@ -1,12 +1,15 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Rating;
 import tn.cita.app.model.dto.CustomerDto;
 import tn.cita.app.model.dto.EmployeeDto;
 import tn.cita.app.model.dto.RatingDto;
 
-public interface RatingMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class RatingMapper {
 	
 	public static RatingDto toDto(@NonNull final Rating rating) {
 		return RatingDto.builder()

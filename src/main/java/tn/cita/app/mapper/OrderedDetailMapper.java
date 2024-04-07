@@ -1,12 +1,15 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.OrderedDetail;
 import tn.cita.app.model.dto.OrderedDetailDto;
 import tn.cita.app.model.dto.ReservationDto;
 import tn.cita.app.model.dto.ServiceDetailDto;
 
-public interface OrderedDetailMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class OrderedDetailMapper {
 	
 	public static OrderedDetailDto toDto(@NonNull final OrderedDetail orderedDetail) {
 		return OrderedDetailDto.builder()

@@ -26,7 +26,7 @@ class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public Page<ReservationDto> findAllByCustomerId(final Integer customerId, final ClientPageRequest clientPageRequest) {
-		log.info("** Find all reservations by customerId.. *\n");
+		log.info("Find all reservations by customerId.. *\n");
 		return this.reservationRepository.findAllByCustomerId(customerId, 
 					PageRequest.of(clientPageRequest.getOffset() - 1, clientPageRequest.getSize(), 
 							Sort.by(clientPageRequest.getSortDirection(), clientPageRequest.getSortBy())))
@@ -35,7 +35,7 @@ class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public ReservationDto findById(final Integer id) {
-		log.info("** Find reservation by id.. *\n");
+		log.info("Find reservation by id.. *\n");
 		return this.reservationRepository.findById(id)
 				.map(ReservationMapper::toDto)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
@@ -50,7 +50,7 @@ class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public ReservationDto findByCode(final String code) {
-		log.info("** Find reservation by code.. *\n");
+		log.info("Find reservation by code.. *\n");
 		return this.reservationRepository.findByCode(code)
 				.map(ReservationMapper::toDto)
 				.orElseThrow(() -> new ReservationNotFoundException(String
@@ -59,7 +59,7 @@ class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public Page<ReservationDto> findAllBySaloonId(final Integer saloonId, final ClientPageRequest clientPageRequest) {
-		log.info("** Find all paged reservations by saloonId.. *\n");
+		log.info("Find all paged reservations by saloonId.. *\n");
 		return this.reservationRepository.findAllBySaloonId(saloonId, 
 					ClientPageRequestUtils.from(clientPageRequest))
 				.map(ReservationMapper::toDto);
@@ -67,7 +67,7 @@ class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public List<ReservationDto> findAllBySaloonId(final Integer saloonId) {
-		log.info("** Find all reservations by saloonId.. *\n");
+		log.info("Find all reservations by saloonId.. *\n");
 		return this.reservationRepository.findAllBySaloonId(saloonId).stream()
 				.map(ReservationMapper::toDto)
 				.distinct()

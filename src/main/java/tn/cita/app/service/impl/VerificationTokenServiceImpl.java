@@ -20,7 +20,7 @@ class VerificationTokenServiceImpl implements VerificationTokenService {
 	
 	@Override
 	public VerificationTokenDto findByToken(final String token) {
-		log.info("** Find verificationToken by token.. *");
+		log.info("Find verificationToken by token.. ");
 		return this.verificationTokenRepository.findByToken(token)
 				.map(VerificationTokenMapper::toDto)
 				.orElseThrow(() -> new VerificationTokenNotFoundException(
@@ -30,7 +30,7 @@ class VerificationTokenServiceImpl implements VerificationTokenService {
 	@Transactional
 	@Override
 	public boolean deleteByToken(final String token) {
-		log.info("** Delete verificationToken by token..*");
+		log.info("Delete verificationToken by token..");
 		this.verificationTokenRepository.deleteByToken(token);
 		return true;
 	}

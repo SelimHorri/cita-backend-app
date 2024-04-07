@@ -48,7 +48,7 @@ class CustomerReservationServiceImpl implements CustomerReservationService {
 	
 	@Override
 	public CustomerReservationResponse fetchAllReservations(final String username, final ClientPageRequest clientPageRequest) {
-		log.info("** Fetch all reservations by customer.. *");
+		log.info("Fetch all reservations by customer.. ");
 		final var customerDto = this.retrieveCustomerByUsername(username);
 		return new CustomerReservationResponse(
 				customerDto,
@@ -59,7 +59,7 @@ class CustomerReservationServiceImpl implements CustomerReservationService {
 	
 	@Override
 	public CustomerReservationResponse searchAllByCustomerIdLikeKey(final String username, final String key) {
-		log.info("** Search all reservations by customerId like key by customer.. *");
+		log.info("Search all reservations by customerId like key by customer.. ");
 		final var customerDto = this.retrieveCustomerByUsername(username);
 		return new CustomerReservationResponse(
 				customerDto, 
@@ -82,7 +82,7 @@ class CustomerReservationServiceImpl implements CustomerReservationService {
 	@Transactional
 	@Override
 	public ReservationDto createReservation(final ReservationRequest reservationRequest) {
-		log.info("** Create new reservation by customer.. *");
+		log.info("Create new reservation by customer.. ");
 		
 		if (!isReservationStartDateValid(reservationRequest))
 			throw new OutdatedStartDateReservationException("Illegal Starting date reservation, plz choose a valid date");

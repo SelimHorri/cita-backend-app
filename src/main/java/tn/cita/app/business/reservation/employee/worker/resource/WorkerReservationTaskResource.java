@@ -2,9 +2,8 @@ package tn.cita.app.business.reservation.employee.worker.resource;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.reservation.employee.worker.model.TaskBeginEndRequest;
@@ -16,47 +15,46 @@ import tn.cita.app.util.UserRequestExtractorUtil;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/employees/workers/reservations/tasks")
-@Slf4j
 @RequiredArgsConstructor
-public class WorkerReservationTaskResource {
+class WorkerReservationTaskResource {
 	
 	@Qualifier("workerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final WorkerReservationTaskService workerReservationTaskService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{reservationId}")
-	public ResponseEntity<ApiResponse<TaskDto>> fetchAssignedTask(final WebRequest webRequest, @PathVariable final String reservationId) {
-		log.info("** Fetch worker assigned task.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
+	ApiResponse<TaskDto> fetchAssignedTask(WebRequest webRequest, @PathVariable String reservationId) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of( 
 				this.workerReservationTaskService.fetchAssignedTask(
-						this.userRequestExtractorUtil.extractUsername(webRequest), 
-						Integer.parseInt(reservationId))));
+						extractUsername, 
+						Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping("/describe")
-	public ResponseEntity<ApiResponse<TaskDto>> updateDescription(
-					final WebRequest webRequest, 
-					@RequestBody @Valid final TaskUpdateDescriptionRequest taskUpdateDescriptionRequest) {
-		log.info("** Update worker description on a reservation details.. *");
+	ApiResponse<TaskDto> updateDescription(WebRequest webRequest,
+										   @RequestBody @Valid TaskUpdateDescriptionRequest taskUpdateDescriptionRequest) {
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.workerReservationTaskService.updateDescription(taskUpdateDescriptionRequest)));
+		return ApiResponse.of( 
+				this.workerReservationTaskService.updateDescription(taskUpdateDescriptionRequest));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping("/begin")
-	public ResponseEntity<ApiResponse<TaskDto>> beginTask(final WebRequest webRequest, 
-			@RequestBody @Valid final TaskBeginEndRequest taskBeginRequest) {
-		log.info("** Begin a worker task.. *");
+	ApiResponse<TaskDto> beginTask(WebRequest webRequest,
+								   @RequestBody @Valid TaskBeginEndRequest taskBeginRequest) {
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.workerReservationTaskService.beginTask(taskBeginRequest)));
+		return ApiResponse.of(this.workerReservationTaskService.beginTask(taskBeginRequest));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping("/end")
-	public ResponseEntity<ApiResponse<TaskDto>> endTask(final WebRequest webRequest, 
-			@RequestBody @Valid final TaskBeginEndRequest taskEndRequest) {
-		log.info("** End a worker task.. *");
+	ApiResponse<TaskDto> endTask(WebRequest webRequest,
+								 @RequestBody @Valid TaskBeginEndRequest taskEndRequest) {
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(ApiResponse.of2xxMono(this.workerReservationTaskService.endTask(taskEndRequest)));
+		return ApiResponse.of(this.workerReservationTaskService.endTask(taskEndRequest));
 	}
 	
 }

@@ -24,7 +24,7 @@ class SaloonServiceImpl implements SaloonService {
 	
 	@Override
 	public Page<SaloonDto> findAll(final ClientPageRequest clientPageRequest) {
-		log.info("** Find all paged saloons.. *");
+		log.info("Find all paged saloons.. ");
 		return this.saloonRepository
 				.findAll(PageRequest.of(
 						clientPageRequest.getOffset() - 1, clientPageRequest.getSize()))
@@ -33,7 +33,7 @@ class SaloonServiceImpl implements SaloonService {
 	
 	@Override
 	public Page<SaloonDto> findAllByLocationState(final String state, final ClientPageRequest clientPageRequest) {
-		log.info("** Find all saloons by location state.. *");
+		log.info("Find all saloons by location state.. ");
 		return this.saloonRepository
 				.findAllByLocationStateIgnoringCase(
 						state.strip(),
@@ -43,7 +43,7 @@ class SaloonServiceImpl implements SaloonService {
 	
 	@Override
 	public SaloonDto findById(final Integer id) {
-		log.info("** Find saloon by id.. *");
+		log.info("Find saloon by id.. ");
 		return this.saloonRepository.findById(id)
 				.map(SaloonMapper::toDto)
 				.orElseThrow(SaloonNotFoundException::new);
@@ -58,7 +58,7 @@ class SaloonServiceImpl implements SaloonService {
 	
 	@Override
 	public Page<SaloonDto> findAllByCode(final String code) {
-		log.info("** Find all saloons by code.. *");
+		log.info("Find all saloons by code.. ");
 		return new PageImpl<>(this.saloonRepository.
 				findAllByCode(code).stream()
 					.map(SaloonMapper::toDto)

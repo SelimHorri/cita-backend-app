@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import tn.cita.app.business.auth.authentication.model.LoginRequest;
@@ -45,7 +44,7 @@ class AuthenticationResourceTest {
 	@Test
 	void givenLoginApiUrl_whenRequestIsValid_thenLoginResponseShouldBeReturned() {
 		
-		final var apiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, this.loginResponse);
+		final var apiPayloadResponse = new ApiResponse<>(-1, true, this.loginResponse);
 		this.webTestClient
 				.post()
 				.uri(AppConstants.API_CONTEXT_V0 + "/authenticate")
@@ -59,8 +58,7 @@ class AuthenticationResourceTest {
 					.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(apiPayloadResponse.totalResult()))
-					.jsonPath("$.httpStatus").value(is(apiPayloadResponse.httpStatus().name()))
+					.jsonPath("$.totalResult").value(is(apiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(apiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.username").value(is(apiPayloadResponse.responseBody().username()))

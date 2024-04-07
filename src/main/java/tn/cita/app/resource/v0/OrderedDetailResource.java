@@ -2,10 +2,9 @@ package tn.cita.app.resource.v0;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.cita.app.model.domain.id.OrderedDetailId;
 import tn.cita.app.model.dto.OrderedDetailDto;
@@ -15,42 +14,38 @@ import tn.cita.app.service.OrderedDetailService;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/ordered-details")
-@Slf4j
 @RequiredArgsConstructor
-public class OrderedDetailResource {
+class OrderedDetailResource {
 	
 	private final OrderedDetailService orderedDetailService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/identifier/{identifier}")
-	public ResponseEntity<ApiResponse<OrderedDetailDto>> findByIdentifier(@PathVariable final String identifier) {
-		log.info("** Find by identifier.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.orderedDetailService.findByIdentifier(identifier.strip())));
+	ApiResponse<OrderedDetailDto> findByIdentifier(@PathVariable String identifier) {
+		return ApiResponse.of(this.orderedDetailService.findByIdentifier(identifier.strip()));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/reservationId/{reservationId}")
-	public ResponseEntity<ApiResponse<Page<OrderedDetailDto>>> findAllByReservationId(@PathVariable final String reservationId) {
-		log.info("** Find all ordered details by reservationId.. *");
-		final var orderedDetailDtos = new PageImpl<>(this.orderedDetailService.findAllByReservationId(Integer.parseInt(reservationId)));
-		return ResponseEntity.ok(ApiResponse.of2xxPoly(orderedDetailDtos.getSize(), orderedDetailDtos));
+	ApiResponse<Page<OrderedDetailDto>> findAllByReservationId(@PathVariable String reservationId) {
+		var orderedDetails = new PageImpl<>(this.orderedDetailService.findAllByReservationId(Integer.parseInt(reservationId)));
+		return ApiResponse.of(orderedDetails.getSize(), orderedDetails);
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@DeleteMapping
-	public ResponseEntity<ApiResponse<Boolean>> deleteById(@RequestBody @Valid final OrderedDetailId orderedDetailId) {
-		log.info("** Delete an ordered detail by id.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.orderedDetailService.deleteById(orderedDetailId)));
+	ApiResponse<Boolean> deleteById(@RequestBody @Valid OrderedDetailId orderedDetailId) {
+		return ApiResponse.of(
+				this.orderedDetailService.deleteById(orderedDetailId));
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public ResponseEntity<ApiResponse<OrderedDetailDto>> save(@RequestBody @Valid final OrderedDetailRequest orderedDetailRequest) {
-		log.info("** Save an ordered detail.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.orderedDetailService.save(orderedDetailRequest)));
+	ApiResponse<OrderedDetailDto> save(@RequestBody @Valid OrderedDetailRequest orderedDetailRequest) {
+		return ApiResponse.of(this.orderedDetailService.save(orderedDetailRequest));
 	}
 	
 }
-
 
 
 

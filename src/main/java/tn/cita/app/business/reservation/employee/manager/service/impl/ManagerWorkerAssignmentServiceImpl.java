@@ -28,7 +28,7 @@ class ManagerWorkerAssignmentServiceImpl implements ManagerWorkerAssignmentServi
 	@Override
 	public ManagerWorkerAssignmentResponse fetchAllWorkerTasks(
 			final String username, final Integer workerId, final ClientPageRequest clientPageRequest) {
-		log.info("** Fetch all worker tasks by manager.. *");
+		log.info("Fetch all worker tasks by manager.. ");
 		final var managerDto = this.retrieveManagerByUsername(username);
 		return new ManagerWorkerAssignmentResponse(
 				managerDto, 
@@ -39,7 +39,7 @@ class ManagerWorkerAssignmentServiceImpl implements ManagerWorkerAssignmentServi
 	
 	@Override
 	public ManagerWorkerAssignmentResponse searchAllLikeKey(final String username, final Integer workerId, final String key) {
-		log.info("** Search all worker tasks like key by manager.. *");
+		log.info("Search all worker tasks like key by manager.. ");
 		return new ManagerWorkerAssignmentResponse(
 				this.retrieveManagerByUsername(username),
 				new PageImpl<>(this.taskRepository

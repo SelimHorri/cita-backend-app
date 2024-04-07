@@ -8,12 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import tn.cita.app.business.auth.CredentialService;
 import tn.cita.app.exception.wrapper.CredentialNotFoundException;
 import tn.cita.app.exception.wrapper.IllegalUserDetailsStateException;
 import tn.cita.app.model.domain.UserRoleBasedAuthority;
-import tn.cita.app.model.dto.CredentialDto;
+import tn.cita.app.model.domain.entity.Credential;
+import tn.cita.app.repository.CredentialRepository;
 import tn.cita.app.security.CustomUserDetails;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -26,13 +28,13 @@ class CustomUserDetailsServiceTest {
 	private UserDetailsService userDetailsService;
 	
 	@MockBean
-	private CredentialService credentialService;
+	private CredentialRepository credentialRepository;
 	
 	@Disabled
 	@Test
 	void givenValidUsername_whenLoadUserByUsername_thenUserDetailsShouldBeFound() {
 		
-		final var credentialDto = CredentialDto.builder()
+		final var credential = Credential.builder()
 				.id(null)
 				.username("selimhorri")
 				.userRoleBasedAuthority(UserRoleBasedAuthority.WORKER)
@@ -42,18 +44,18 @@ class CustomUserDetailsServiceTest {
 				.isCredentialsNonExpired(true)
 				.build();
 		
-		when(this.credentialService.findByUsername(credentialDto.getUsername()))
-				.thenReturn(credentialDto);
+		when(this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()))
+				.thenReturn(Optional.of(credential));
 		
-		final var expectedUserDetails = new CustomUserDetails(credentialDto);
-		final var userDetails = this.userDetailsService.loadUserByUsername(credentialDto.getUsername());
+		final var expectedUserDetails = new CustomUserDetails(credential);
+		final var userDetails = this.userDetailsService.loadUserByUsername(credential.getUsername());
 		
 		assertThat(userDetails)
 				.isNotNull()
 				.isInstanceOf(UserDetails.class);
 		assertThat(userDetails.getUsername()).isEqualTo(expectedUserDetails.getUsername());
 		assertThat(userDetails.getAuthorities()).allSatisfy(sga -> assertThat(sga.getAuthority())
-				.isEqualTo(credentialDto.getUserRoleBasedAuthority().getRole()));
+				.isEqualTo(credential.getUserRoleBasedAuthority().getRole()));
 		assertThat(userDetails.isEnabled()).isTrue();
 		assertThat(userDetails.isAccountNonExpired()).isTrue();
 		assertThat(userDetails.isAccountNonLocked()).isTrue();
@@ -64,7 +66,7 @@ class CustomUserDetailsServiceTest {
 	@Test
 	void givenInvalidUsername_whenLoadUserByUsername_thenShouldThrowCredentialNotFoundException() {
 		
-		final var credentialDto = CredentialDto.builder()
+		final var credential = Credential.builder()
 				.id(null)
 				.username("selimhorrishdkfbzkih")
 				.userRoleBasedAuthority(UserRoleBasedAuthority.WORKER)
@@ -74,11 +76,11 @@ class CustomUserDetailsServiceTest {
 				.isCredentialsNonExpired(true)
 				.build();
 		
-		when(this.credentialService.findByUsername(credentialDto.getUsername()))
+		when(this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()))
 				.thenThrow(CredentialNotFoundException.class);
 		
 		final var credentialNotFoundException = assertThrows(CredentialNotFoundException.class, 
-				() -> this.credentialService.findByUsername(credentialDto.getUsername()));
+				() -> this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()));
 		
 		assertThat(credentialNotFoundException)
 				.isNotNull()
@@ -89,7 +91,7 @@ class CustomUserDetailsServiceTest {
 	@Test
 	void givenValidUsername_whenLoadUserByUsernameAndUserIsDisabled_thenIllegalUserDetailsStateExceptionShouldBeThrown() {
 		
-		final var credentialDto = CredentialDto.builder()
+		final var credential = Credential.builder()
 				.id(null)
 				.username("selimhorrishdkfbzkih")
 				.userRoleBasedAuthority(UserRoleBasedAuthority.WORKER)
@@ -99,10 +101,10 @@ class CustomUserDetailsServiceTest {
 				.isCredentialsNonExpired(true)
 				.build();
 		
-		when(this.credentialService.findByUsername(credentialDto.getUsername()))
-				.thenReturn(credentialDto);
+		when(this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()))
+				.thenReturn(Optional.of(credential));
 		
-		final var userDetails = new CustomUserDetails(credentialDto);
+		final var userDetails = new CustomUserDetails(credential);
 		
 		final var illegalUserDetailsStateException = assertThrows(IllegalUserDetailsStateException.class, 
 				() -> this.userDetailsService.loadUserByUsername(userDetails.getUsername()));
@@ -122,7 +124,7 @@ class CustomUserDetailsServiceTest {
 	@Test
 	void givenValidUsername_whenLoadUserByUsernameAndUserAccountIsExpired_thenIllegalUserDetailsStateExceptionShouldBeThrown() {
 		
-		final var credentialDto = CredentialDto.builder()
+		final var credential = Credential.builder()
 				.id(null)
 				.username("selimhorrishdkfbzkih")
 				.userRoleBasedAuthority(UserRoleBasedAuthority.WORKER)
@@ -132,10 +134,10 @@ class CustomUserDetailsServiceTest {
 				.isCredentialsNonExpired(true)
 				.build();
 		
-		when(this.credentialService.findByUsername(credentialDto.getUsername()))
-				.thenReturn(credentialDto);
+		when(this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()))
+				.thenReturn(Optional.of(credential));
 		
-		final UserDetails userDetails = new CustomUserDetails(credentialDto);
+		final UserDetails userDetails = new CustomUserDetails(credential);
 		
 		final var illegalUserDetailsStateException = assertThrows(IllegalUserDetailsStateException.class, 
 				() -> this.userDetailsService.loadUserByUsername(userDetails.getUsername()));
@@ -153,7 +155,7 @@ class CustomUserDetailsServiceTest {
 	@Test
 	void givenValidUsername_whenLoadUserByUsernameAndUserAccountIsLocked_thenIllegalUserDetailsStateExceptionShouldBeThrown() {
 		
-		final var credentialDto = CredentialDto.builder()
+		final var credential = Credential.builder()
 				.id(null)
 				.username("selimhorrishdkfbzkih")
 				.userRoleBasedAuthority(UserRoleBasedAuthority.WORKER)
@@ -163,10 +165,10 @@ class CustomUserDetailsServiceTest {
 				.isCredentialsNonExpired(true)
 				.build();
 		
-		when(this.credentialService.findByUsername(credentialDto.getUsername()))
-		.thenReturn(credentialDto);
+		when(this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()))
+		.thenReturn(Optional.of(credential));
 		
-		final UserDetails userDetails = new CustomUserDetails(credentialDto);
+		final UserDetails userDetails = new CustomUserDetails(credential);
 		
 		final var illegalUserDetailsStateException = assertThrows(IllegalUserDetailsStateException.class, 
 				() -> this.userDetailsService.loadUserByUsername(userDetails.getUsername()));
@@ -184,7 +186,7 @@ class CustomUserDetailsServiceTest {
 	@Test
 	void givenValidUsername_whenLoadUserByUsernameAndUserCredentialsAreExpired_thenIllegalUserDetailsStateExceptionShouldBeThrown() {
 		
-		final var credentialDto = CredentialDto.builder()
+		final var credential = Credential.builder()
 				.id(null)
 				.username("selimhorrishdkfbzkih")
 				.userRoleBasedAuthority(UserRoleBasedAuthority.WORKER)
@@ -194,10 +196,10 @@ class CustomUserDetailsServiceTest {
 				.isCredentialsNonExpired(false)
 				.build();
 		
-		when(this.credentialService.findByUsername(credentialDto.getUsername()))
-				.thenReturn(credentialDto);
+		when(this.credentialRepository.findByUsernameIgnoreCase(credential.getUsername()))
+				.thenReturn(Optional.of(credential));
 		
-		final UserDetails userDetails = new CustomUserDetails(credentialDto);
+		final UserDetails userDetails = new CustomUserDetails(credential);
 		
 		final var illegalUserDetailsStateException = assertThrows(IllegalUserDetailsStateException.class, 
 				() -> this.userDetailsService.loadUserByUsername(userDetails.getUsername()));

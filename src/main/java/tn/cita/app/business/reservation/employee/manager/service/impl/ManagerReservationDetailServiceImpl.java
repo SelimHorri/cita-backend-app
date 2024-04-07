@@ -37,7 +37,7 @@ class ManagerReservationDetailServiceImpl implements ManagerReservationDetailSer
 	
 	@Override
 	public ReservationDetailResponse fetchReservationDetails(final Integer reservationId) {
-		log.info("** Fetch reservation details by reservationId by manager.. *");
+		log.info("Fetch reservation details by reservationId by manager.. ");
 		final var reservationDto = this.reservationRepository
 				.findById(reservationId)
 				.map(ReservationMapper::toDto)
@@ -54,7 +54,7 @@ class ManagerReservationDetailServiceImpl implements ManagerReservationDetailSer
 	
 	@Override
 	public ReservationBeginEndTaskResponse fetchBeginEndTask(final Integer reservationId) {
-		log.info("** Fetch begin end task by manager.. *");
+		log.info("Fetch begin end task by manager.. ");
 		
 		final var tasks = this.taskRepository.findAllByReservationId(reservationId);
 		

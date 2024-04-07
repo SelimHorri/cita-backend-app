@@ -1,12 +1,15 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.SaloonTag;
 import tn.cita.app.model.dto.SaloonDto;
 import tn.cita.app.model.dto.SaloonTagDto;
 import tn.cita.app.model.dto.TagDto;
 
-public interface SaloonTagMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class SaloonTagMapper {
 	
 	public static SaloonTagDto toDto(@NonNull final SaloonTag saloonTag) {
 		return SaloonTagDto.builder()

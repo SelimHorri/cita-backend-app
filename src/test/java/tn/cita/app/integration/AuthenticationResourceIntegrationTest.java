@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -49,7 +48,7 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 	void givenLoginApiUrl_whenRequestIsValid_thenLoginResponseShouldBeReturned() {
 		
 		this.loginResponse = this.authenticationService.authenticate(loginRequest);
-		final var apiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, loginResponse);
+		final var apiPayloadResponse = new ApiResponse<>(-1, true, loginResponse);
 		
 		this.webTestClient
 				.post()
@@ -64,8 +63,7 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 					.contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(apiPayloadResponse.totalResult()))
-					.jsonPath("$.httpStatus").value(is(apiPayloadResponse.httpStatus().name()))
+					.jsonPath("$.totalResult").value(is(apiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(apiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.username").value(is(apiPayloadResponse.responseBody().username()));
@@ -79,7 +77,7 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 	void givenLoginApiUrl_whenRequestWithInvalidUsername_thenExceptionMsgShouldBeReturned() {
 		
 		final var wrongUsernameLoginRequest = new LoginRequest(this.loginRequest + "iiii", this.loginRequest.password());
-		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(1, HttpStatus.BAD_REQUEST, false, 
+		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(-1, false, 
 				new ExceptionMsg("#### Username is not registered! ####"));
 		
 		this.webTestClient
@@ -95,8 +93,7 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 					.contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(apiPayloadResponse.totalResult()))
-					.jsonPath("$.httpStatus").value(is(apiPayloadResponse.httpStatus().name()))
+					.jsonPath("$.totalResult").value(is(apiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(apiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -110,7 +107,7 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 	void givenLoginApiUrl_whenRequestWithInvalidPasswordOrElse_thenExceptionMsgShouldBeReturned() {
 		
 		final var wrongCredentialsLoginRequest = new LoginRequest(this.loginRequest.username(), this.loginRequest.password() + "012545");
-		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(1, HttpStatus.BAD_REQUEST, false, 
+		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(-1, false, 
 				new ExceptionMsg("#### Incorrect password! ####"));
 		
 		this.webTestClient
@@ -126,8 +123,7 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 					.contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(apiPayloadResponse.totalResult()))
-					.jsonPath("$.httpStatus").value(is(apiPayloadResponse.httpStatus().name()))
+					.jsonPath("$.totalResult").value(is(apiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(apiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -140,8 +136,8 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 	void givenLoginApiUrl_whenRequestUsernameIsBlank_thenCustomValidationExceptionMsgShouldBeReturned() {
 		
 		final var wrongCredentialsLoginRequest = new LoginRequest(null, this.loginRequest.password());
-		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(1, HttpStatus.BAD_REQUEST, false, 
-				new ExceptionMsg("*Input username should not be blank!**"));
+		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(-1, false, 
+				new ExceptionMsg("*Input username should not be blank!*"));
 		
 		this.webTestClient
 				.post()
@@ -156,12 +152,11 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 					.contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(apiPayloadResponse.totalResult()))
-					.jsonPath("$.httpStatus").value(is(apiPayloadResponse.httpStatus().name()))
+					.jsonPath("$.totalResult").value(is(apiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(apiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
-					.jsonPath("$.responseBody.errorMsg").value(startsWith("*"))
-					.jsonPath("$.responseBody.errorMsg").value(endsWith("!**"))
+					.jsonPath("$.responseBody.errorMsg").value(startsWith(""))
+					.jsonPath("$.responseBody.errorMsg").value(endsWith("!*"))
 					.jsonPath("$.responseBody.errorMsg").value(containsStringIgnoringCase("Input username should not be blank"))
 					.jsonPath("$.responseBody.errorMsg").value(is(apiPayloadResponse.responseBody().errorMsg()));
 	}
@@ -170,8 +165,8 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 	void givenLoginApiUrl_whenRequestPasswordIsEmpty_thenCustomValidationExceptionMsgShouldBeReturned() {
 		
 		final var wrongCredentialsLoginRequest = new LoginRequest(this.loginRequest.username(), null);
-		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(1, HttpStatus.BAD_REQUEST, false, 
-				new ExceptionMsg("*Input password should not be blank!**"));
+		final var apiPayloadResponse = new ApiResponse<ExceptionMsg>(-1, false, 
+				new ExceptionMsg("*Input password should not be blank!*"));
 		
 		this.webTestClient
 				.post()
@@ -186,12 +181,11 @@ class AuthenticationResourceIntegrationTest extends AbstractSharedMySQLTestConta
 					.contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(apiPayloadResponse.totalResult()))
-					.jsonPath("$.httpStatus").value(is(apiPayloadResponse.httpStatus().name()))
+					.jsonPath("$.totalResult").value(is(apiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(apiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
-					.jsonPath("$.responseBody.errorMsg").value(startsWith("*"))
-					.jsonPath("$.responseBody.errorMsg").value(endsWith("!**"))
+					.jsonPath("$.responseBody.errorMsg").value(startsWith(""))
+					.jsonPath("$.responseBody.errorMsg").value(endsWith("!*"))
 					.jsonPath("$.responseBody.errorMsg").value(containsStringIgnoringCase("Input password should not be blank"))
 					.jsonPath("$.responseBody.errorMsg").value(is(apiPayloadResponse.responseBody().errorMsg()));
 	}

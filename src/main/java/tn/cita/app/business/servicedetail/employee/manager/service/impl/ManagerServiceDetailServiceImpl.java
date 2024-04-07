@@ -33,7 +33,7 @@ class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
 	
 	@Override
 	public Page<ServiceDetailDto> fetchAll(final String username) {
-		log.info("** Fetch all service details by manager.. *");
+		log.info("Fetch all service details by manager.. ");
 		
 		final var manager = this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(username.strip())
@@ -51,7 +51,7 @@ class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
 	
 	@Override
 	public ServiceDetailDto fetchById(final Integer serviceDetailId) {
-		log.info("** Fetch service detail by id by manager.. *");
+		log.info("Fetch service detail by id by manager.. ");
 		return this.serviceDetailRepository.findById(serviceDetailId)
 				.map(ServiceDetailMapper::toDto)
 				.orElseThrow(ServiceDetailNotFoundException::new);
@@ -60,7 +60,7 @@ class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
 	@Transactional
 	@Override
 	public Boolean deleteServiceDetail(final Integer serviceDetailId) {
-		log.info("** Delete service detail by id by manager.. *");
+		log.info("Delete service detail by id by manager.. ");
 		this.serviceDetailRepository.deleteById(serviceDetailId);
 		return !this.serviceDetailRepository.existsById(serviceDetailId);
 	}
@@ -68,7 +68,7 @@ class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
 	@Transactional
 	@Override
 	public ServiceDetailDto saveServiceDetail(final ServiceDetailRequest serviceDetailRequest) {
-		log.info("** Save new service detail.. *");
+		log.info("Save new service detail.. ");
 		
 		final var category = this.categoryRepository.findById(serviceDetailRequest.getCategoryId())
 				.orElseThrow(CategoryNotFoundException::new);
@@ -89,7 +89,7 @@ class ManagerServiceDetailServiceImpl implements ManagerServiceDetailService {
 	@Transactional
 	@Override
 	public ServiceDetailDto updateServiceDetail(final ServiceDetailRequest serviceDetailRequest) {
-		log.info("** Update service detail.. *");
+		log.info("Update service detail.. ");
 		
 		final var category = this.categoryRepository.findById(serviceDetailRequest.getCategoryId())
 				.orElseThrow(CategoryNotFoundException::new);

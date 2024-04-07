@@ -39,7 +39,7 @@ class CustomerProfileServiceImpl implements CustomerProfileService {
 	
 	@Override
 	public CustomerProfileResponse fetchProfile(final String username, final ClientPageRequest clientPageRequest) {
-		log.info("** Fetch customer profile.. *\n");
+		log.info("Fetch customer profile.. *\n");
 		final var customerDto = this.customerRepository
 				.findByCredentialUsernameIgnoringCase(username)
 				.map(CustomerMapper::toDto)
@@ -68,7 +68,7 @@ class CustomerProfileServiceImpl implements CustomerProfileService {
 	@Override
 	public CustomerDto updateProfileInfo(final CustomerProfileRequest customerProfileRequest) {
 		
-		log.info("** Update customer profile.. *\n");
+		log.info("Update customer profile.. *\n");
 		
 		this.customerRepository
 				.findByCredentialUsernameIgnoringCase(customerProfileRequest.username().strip())

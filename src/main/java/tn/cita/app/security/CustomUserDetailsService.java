@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.cita.app.exception.wrapper.IllegalCredentialsException;
 import tn.cita.app.exception.wrapper.IllegalUserDetailsStateException;
-import tn.cita.app.mapper.CredentialMapper;
 import tn.cita.app.repository.CredentialRepository;
 
 @Service
@@ -21,28 +20,28 @@ class CustomUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(final String username) {
-		log.info("** Load user by username.. *");
+		log.info("Load user by username..");
 		
-		final UserDetails userDetails = new CustomUserDetails(
-				this.credentialRepository
-						.findByUsernameIgnoreCase(username.strip().toLowerCase())
-						.map(CredentialMapper::toDto)
-						.orElseThrow(() -> new IllegalCredentialsException("Username is not registered")));
+		final UserDetails userDetails = this.credentialRepository
+				.findByUsernameIgnoreCase(username.strip().toLowerCase())
+				.map(CustomUserDetails::new)
+				.orElseThrow(() -> new IllegalCredentialsException("Username is not registered"));
 		
 		if (!userDetails.isEnabled())
-			throw new IllegalUserDetailsStateException(String
-					.format("User with username: %s is disabled, checkout your mail to activate it", userDetails.getUsername()));
+			throw new IllegalUserDetailsStateException(
+					"User with username: %s is disabled, checkout your mail to activate it".formatted(userDetails.getUsername()));
 		if (!userDetails.isAccountNonExpired())
-			throw new IllegalUserDetailsStateException(String
-					.format("User account with username: %s is expired", userDetails.getUsername()));
+			throw new IllegalUserDetailsStateException(
+					"User account with username: %s is expired".formatted(userDetails.getUsername()));
 		if (!userDetails.isAccountNonLocked())
-			throw new IllegalUserDetailsStateException(String
-					.format("User account with username: %s is locked", userDetails.getUsername()));
+			throw new IllegalUserDetailsStateException("User account with username: %s is locked".formatted(userDetails.getUsername()));
 		if (!userDetails.isCredentialsNonExpired())
-			throw new IllegalUserDetailsStateException(String
-					.format("User credentials with username: %s are expired", userDetails.getUsername()));
+			throw new IllegalUserDetailsStateException(
+					"User credentials with username: %s are expired".formatted(userDetails.getUsername()));
 		
-		return userDetails;
+		return this.credentialRepository.findByUsernameIgnoreCase(username.strip().toLowerCase())
+				.map(CustomUserDetails::new)
+				.orElseThrow(() -> new IllegalCredentialsException("Username is not registered"));
 	}
 	
 }

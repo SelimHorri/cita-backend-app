@@ -27,7 +27,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	
 	@Override
 	public LoginResponse authenticate(final LoginRequest loginRequest) {
-		log.info("** Authenticate user.. *");
+		log.info("Authenticate user.. ");
 		
 		final var userDetails = this.userDetailsService.loadUserByUsername(loginRequest.username());
 		

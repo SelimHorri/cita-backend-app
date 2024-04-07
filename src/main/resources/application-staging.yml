@@ -1,4 +1,3 @@
-
 app:
   security:
     jwt:
@@ -58,9 +57,3 @@ spring:
       on-cloud-platform: kubernetes
     import:
       - 'classpath:import/conf/k8s-config.yml'
-
-
-
-
-
-

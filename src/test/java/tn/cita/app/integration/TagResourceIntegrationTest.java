@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import tn.cita.app.constant.AppConstants;
 import tn.cita.app.container.AbstractSharedMySQLTestContainer;
@@ -79,7 +78,7 @@ class TagResourceIntegrationTest extends AbstractSharedMySQLTestContainer {
 				.build()
 		);
 		
-		final var expectedPayload = new ApiResponse<>(2, HttpStatus.OK, true, list);
+		final var expectedPayload = new ApiResponse<>(2, true, list);
 		this.webTestClient
 				.get()
 				.uri(AppConstants.API_CONTEXT_V0 + "/tags?offset={offset}", clientPageRequest.getOffset())
@@ -88,7 +87,7 @@ class TagResourceIntegrationTest extends AbstractSharedMySQLTestContainer {
 					.is2xxSuccessful()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedPayload.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedPayload.total()))
 					.jsonPath("$.acknowledge").value(is(expectedPayload.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.size()").value(is(expectedPayload.responseBody().size()));
@@ -103,7 +102,7 @@ class TagResourceIntegrationTest extends AbstractSharedMySQLTestContainer {
 				.name("barber")
 				.build();
 		
-		final var expectedPayload = new ApiResponse<>(1, HttpStatus.OK, true, tagDto);
+		final var expectedPayload = new ApiResponse<>(-1, true, tagDto);
 		this.webTestClient
 				.get()
 				.uri(AppConstants.API_CONTEXT_V0 + "/tags/{id}", id)
@@ -112,7 +111,7 @@ class TagResourceIntegrationTest extends AbstractSharedMySQLTestContainer {
 					.is2xxSuccessful()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedPayload.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedPayload.total()))
 					.jsonPath("$.acknowledge").value(is(expectedPayload.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.id").value(notNullValue())
@@ -123,7 +122,7 @@ class TagResourceIntegrationTest extends AbstractSharedMySQLTestContainer {
 	void givenInvalidId_whenFindById_thenTagNotFoundExceptionShouldBeThrown() {
 		
 		final int id = 0;
-		final var expectedPayload = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false, 
+		final var expectedPayload = new ApiResponse<>(-1, false, 
 				new ExceptionMsg(String.format("%sTag not found%s", "#### ", "! ####")));
 		
 		this.webTestClient
@@ -134,7 +133,7 @@ class TagResourceIntegrationTest extends AbstractSharedMySQLTestContainer {
 					.isBadRequest()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedPayload.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedPayload.total()))
 					.jsonPath("$.acknowledge").value(is(expectedPayload.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))

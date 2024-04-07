@@ -40,10 +40,10 @@ public class RegistrationJobScheduler {
 						this.customerRepository.deleteById(id);
 						return id;
 					})
-					.peek(id -> log.info("** Customer with id: {} has been deleted **", id))
+					.peek(id -> log.info("Customer with id: {} has been deleted", id))
 					.count();
 		
-		log.info("** {} customers have been deleted at {} due to unconfirmed accounts **", 
+		log.info("{} customers have been deleted at {} due to unconfirmed accounts", 
 				counted, 
 				Instant.now().atZone(ZoneId.systemDefault()));
 	}
@@ -64,7 +64,7 @@ public class RegistrationJobScheduler {
 			};
 		}
 		
-		log.info("** {} employees have been deleted at {} due to unconfirmed accounts **", 
+		log.info("{} employees have been deleted at {} due to unconfirmed accounts", 
 				counted, 
 				Instant.now().atZone(ZoneId.systemDefault()));
 	}
@@ -79,7 +79,7 @@ public class RegistrationJobScheduler {
 						this.employeeRepository.deleteById(id);
 						return id;
 					})
-					.peek(id -> log.info("** {} with id: {} has been deleted **", role.name(), id))
+					.peek(id -> log.info("{} with id: {} has been deleted", role.name(), id))
 					.count();
 	}
 	

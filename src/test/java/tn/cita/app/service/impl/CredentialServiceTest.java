@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class CredentialServiceImplTest {
+class CredentialServiceTest {
 	
 	@MockBean
 	private CredentialRepository credentialRepository;

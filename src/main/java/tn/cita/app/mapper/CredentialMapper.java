@@ -1,10 +1,13 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Credential;
 import tn.cita.app.model.dto.CredentialDto;
 
-public interface CredentialMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class CredentialMapper {
 	
 	public static CredentialDto toDto(@NonNull final Credential credential) {
 		return CredentialDto.builder()

@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import tn.cita.app.constant.AppConstants;
@@ -45,7 +44,7 @@ class CredentialResourceIntegrationTest extends AbstractSharedMySQLTestContainer
 				.isCredentialsNonExpired(true)
 				.build();
 		
-		final var expectedPayload = new ApiResponse<>(1, HttpStatus.OK, true, credentialDto);
+		final var expectedPayload = new ApiResponse<>(-1, true, credentialDto);
 		
 		this.webTestClient
 				.get()
@@ -55,7 +54,7 @@ class CredentialResourceIntegrationTest extends AbstractSharedMySQLTestContainer
 					.is2xxSuccessful()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedPayload.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedPayload.total()))
 					.jsonPath("$.acknowledge").value(is(expectedPayload.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.username").value(is(expectedPayload.responseBody().getUsername()))
@@ -74,7 +73,7 @@ class CredentialResourceIntegrationTest extends AbstractSharedMySQLTestContainer
 		
 		final var exceptionMsg = new ExceptionMsg("#### Credential with username %s not found! ####".formatted(username));
 		
-		final var expectedPayload = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false, exceptionMsg);
+		final var expectedPayload = new ApiResponse<>(-1, false, exceptionMsg);
 		
 		this.webTestClient
 				.get()
@@ -84,7 +83,7 @@ class CredentialResourceIntegrationTest extends AbstractSharedMySQLTestContainer
 					.isBadRequest()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedPayload.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedPayload.total()))
 					.jsonPath("$.acknowledge").value(is(expectedPayload.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(is(expectedPayload.responseBody().errorMsg()));

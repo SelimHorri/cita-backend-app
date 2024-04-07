@@ -37,8 +37,8 @@ public final class AppConstants {
 	 * WhiteList URLs to be authorised with http security
 	 */
 	public static final String[] WHITELIST_URLS = {
-			"/", 
-			"/h2-console/**", 
+			"/",
+			"/h2-console/**",
 			"/api/v*/authenticate/**",
 			"/api/v*/register/**",
 			"/v3/api-docs/**",
@@ -94,7 +94,6 @@ public final class AppConstants {
 	public static final String CRON_MONDAY_MIDAY = "0 0 12 * * 1";
 	
 }
-
 
 
 

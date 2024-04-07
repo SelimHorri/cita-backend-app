@@ -30,7 +30,7 @@ class CustomerReservationDetailServiceImpl implements CustomerReservationDetailS
 	
 	@Override
 	public ReservationDetailResponse fetchReservationDetails(final Integer reservationId) {
-		log.info("** Fetch reservation details by reservationId by customer.. *");
+		log.info("Fetch reservation details by reservationId by customer..");
 		final var reservationDto = this.reservationRepository.findById(reservationId)
 				.map(ReservationMapper::toDto)
 				.orElseThrow(ReservationNotFoundException::new);
@@ -49,7 +49,7 @@ class CustomerReservationDetailServiceImpl implements CustomerReservationDetailS
 	
 	@Override
 	public ReservationDetailResponse fetchReservationDetails(final String reservationIdentifier) {
-		log.info("** Fetch reservation details by reservationIdentifier by customer.. *");
+		log.info("Fetch reservation details by reservationIdentifier by customer.. ");
 		final var reservationDto = this.reservationRepository
 				.findByIdentifier(reservationIdentifier.strip())
 				.map(ReservationMapper::toDto)
@@ -70,7 +70,7 @@ class CustomerReservationDetailServiceImpl implements CustomerReservationDetailS
 	@Transactional
 	@Override
 	public ReservationDto updateReservationDetails(final ReservationDetailRequest reservationDetailRequest) {
-		log.info("** Update reservation details by customer.. *");
+		log.info("Update reservation details by customer.. ");
 		final var reservation = this.reservationRepository
 				.findById(reservationDetailRequest.reservationId())
 				.orElseThrow(ReservationNotFoundException::new);

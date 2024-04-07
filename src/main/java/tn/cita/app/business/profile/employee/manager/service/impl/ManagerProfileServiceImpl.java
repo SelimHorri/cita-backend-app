@@ -33,7 +33,7 @@ class ManagerProfileServiceImpl implements ManagerProfileService {
 	
 	@Override
 	public ManagerProfileResponse fetchProfile(final String username) {
-		log.info("** Fetch manager profile.. *\n");
+		log.info("Fetch manager profile.. *\n");
 		
 		final var managerDto = this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(username.strip())
@@ -68,7 +68,7 @@ class ManagerProfileServiceImpl implements ManagerProfileService {
 	@Transactional
 	@Override
 	public EmployeeDto updateProfileInfo(final ManagerProfileRequest managerProfileRequest) {
-		log.info("** Update manager profile.. *\n");
+		log.info("Update manager profile.. *\n");
 		
 		this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(managerProfileRequest.username().strip())

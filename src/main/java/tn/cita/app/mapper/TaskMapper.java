@@ -1,5 +1,7 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Employee;
 import tn.cita.app.model.domain.entity.Reservation;
@@ -10,7 +12,8 @@ import tn.cita.app.model.dto.TaskDto;
 
 import java.util.Objects;
 
-public interface TaskMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TaskMapper {
 	
 public static TaskDto toDto(@NonNull final Task task) {
 		

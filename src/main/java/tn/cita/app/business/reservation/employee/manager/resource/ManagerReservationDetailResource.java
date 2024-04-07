@@ -2,9 +2,8 @@ package tn.cita.app.business.reservation.employee.manager.resource;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.reservation.employee.manager.model.ReservationAssignWorkerRequest;
@@ -17,50 +16,44 @@ import tn.cita.app.util.UserRequestExtractorUtil;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/employees/managers/reservations/details")
-@Slf4j
 @RequiredArgsConstructor
-public class ManagerReservationDetailResource {
+class ManagerReservationDetailResource {
 	
 	@Qualifier("managerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final ManagerReservationDetailService managerReservationDetailService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{reservationId}")
-	public ResponseEntity<ApiResponse<ReservationDetailResponse>> fetchReservationDetails(
-					final WebRequest request, @PathVariable final String reservationId) {
-		log.info("** Fetch manager reservation details.. *");
+	ApiResponse<ReservationDetailResponse> fetchReservationDetails(WebRequest request, @PathVariable String reservationId) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.managerReservationDetailService.fetchReservationDetails(Integer.parseInt(reservationId))));
+		return ApiResponse.of(this.managerReservationDetailService.fetchReservationDetails(Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{reservationId}/tasks/info/beginEnd")
-	public ResponseEntity<ApiResponse<ReservationBeginEndTaskResponse>> fetchBeginEndTask(
-					final WebRequest webRequest, @PathVariable final String reservationId) {
-		log.info("** Fetch manager begin and end task.. *");
+	ApiResponse<ReservationBeginEndTaskResponse> fetchBeginEndTask(WebRequest webRequest, @PathVariable String reservationId) {
 		this.userRequestExtractorUtil.extractUsername(webRequest);
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.managerReservationDetailService.fetchBeginEndTask(Integer.parseInt(reservationId))));
+		return ApiResponse.of(this.managerReservationDetailService.fetchBeginEndTask(Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{reservationId}/tasks/unassigned")
-	public ResponseEntity<ApiResponse<ReservationSubWorkerResponse>> fetchAllUnassignedSubWorkers(
-					final WebRequest webRequest, @PathVariable final String reservationId) {
-		log.info("** Fetch all manager unassigned sub workers.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
+	ApiResponse<ReservationSubWorkerResponse> fetchAllUnassignedSubWorkers(WebRequest webRequest, @PathVariable String reservationId) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(
 				this.managerReservationDetailService.fetchAllUnassignedSubWorkers(
-						this.userRequestExtractorUtil.extractUsername(webRequest), Integer.parseInt(reservationId))));
+						extractUsername,
+						Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/tasks/assign")
-	public ResponseEntity<ApiResponse<ReservationSubWorkerResponse>> assignReservationWorkers(
-					final WebRequest webRequest, 
-					@RequestBody @Valid final ReservationAssignWorkerRequest reservationAssignWorkerRequest) {
-		log.info("** Assign sub workers to a reservation by manager.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.managerReservationDetailService.assignReservationWorkers(
-						this.userRequestExtractorUtil.extractUsername(webRequest),
-						reservationAssignWorkerRequest)));
+	ApiResponse<ReservationSubWorkerResponse> assignReservationWorkers(WebRequest webRequest,
+																	   @RequestBody @Valid ReservationAssignWorkerRequest assignWorkerRequest) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(
+				this.managerReservationDetailService.assignReservationWorkers(extractUsername, assignWorkerRequest));
 	}
 	
 }

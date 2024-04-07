@@ -42,7 +42,7 @@ class ManagerReservationServiceImpl implements ManagerReservationService {
 	 */
 	@Override
 	public ManagerReservationResponse fetchAllReservations(final String username) {
-		log.info("** Fetch all reservations by manager.. *");
+		log.info("Fetch all reservations by manager.. ");
 		final var managerDto = this.retrieveManagerByUsername(username);
 		final var foundReservations = this.reservationRepository.findAllBySaloonId(
 						Objects.requireNonNullElse(managerDto.getSaloonDto(), new SaloonDto()).getId()).stream()
@@ -63,7 +63,7 @@ class ManagerReservationServiceImpl implements ManagerReservationService {
 	 */
 	@Override
 	public ManagerReservationResponse fetchAllReservations(final String username, final ClientPageRequest clientPageRequest) {
-		log.info("** Fetch paged reservations by manager.. *");
+		log.info("Fetch paged reservations by manager.. ");
 		final var managerDto = this.retrieveManagerByUsername(username);
 		return new ManagerReservationResponse(
 				managerDto,
@@ -81,7 +81,7 @@ class ManagerReservationServiceImpl implements ManagerReservationService {
 	
 	@Override
 	public ManagerReservationResponse searchAllBySaloonIdLikeKey(final String username, final String key) {
-		log.info("** Search all reservations by saloonId like key by manager.. *");
+		log.info("Search all reservations by saloonId like key by manager.. ");
 		final var managerDto = this.retrieveManagerByUsername(username);
 		final var foundReservations = this.reservationRepository
 				.searchAllBySaloonIdLikeKey(

@@ -1,11 +1,14 @@
 package tn.cita.app.mapper;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import tn.cita.app.model.domain.entity.VerificationToken;
 import tn.cita.app.model.dto.CredentialDto;
 import tn.cita.app.model.dto.VerificationTokenDto;
 
-public interface VerificationTokenMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class VerificationTokenMapper {
 	
 	public static VerificationTokenDto toDto(@NotNull final VerificationToken verificationToken) {
 		return VerificationTokenDto.builder()

@@ -1,70 +1,110 @@
 package tn.cita.app.resource;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import tn.cita.app.exception.payload.ExceptionMsg;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tn.cita.app.exception.wrapper.BusinessException;
+import tn.cita.app.exception.wrapper.ObjectNotFoundException;
 import tn.cita.app.model.dto.response.api.ApiResponse;
 
-import java.util.Objects;
+import java.net.URI;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
-public class ApiExceptionHandler {
+class ApiExceptionHandler {
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public <T extends MethodArgumentNotValidException> ResponseEntity<ApiResponse<ExceptionMsg>> handleValidationException(final T e) {
-		log.info("** Handle validation exception.. *");
+	<T extends MethodArgumentNotValidException> ResponseEntity<ApiResponse<ProblemDetail>> handleValidationException(
+																							T e, HttpServletRequest request) {
+		log.info("Handling validation exception..");
 		
-		final var fieldError = Objects.requireNonNullElseGet(e.getBindingResult().getFieldError(), 
-				() -> new FieldError(null, null, "Validation error happened, check again"));
+		record InvalidField(String fieldName, String reason) {}
 		
-		final var httpStatus = HttpStatus.BAD_REQUEST;
-		final var exceptionMsg = new ExceptionMsg("*%s!**".formatted(fieldError.getDefaultMessage()));
-		final var apiResponse = new ApiResponse<>(1, httpStatus, false, exceptionMsg);
+		var invalidFields = e.getBindingResult().getFieldErrors().stream()
+				.map(fieldError -> new InvalidField(
+						fieldError.getField(),
+						fieldError.getDefaultMessage()))
+				.toList();
 		
-		return ResponseEntity.status(httpStatus)
+		var problemDetail = ProblemDetail.forStatusAndDetail(
+				HttpStatus.BAD_REQUEST, 
+				"#### %s! ####".formatted("There are validation errors"));
+		problemDetail.setType(URI.create(e.getClass().getSimpleName()));
+		problemDetail.setInstance(URI.create(request.getRequestURI()));
+		problemDetail.setProperty("invalidFields", invalidFields);
+		log.error("Processing problemDetail: {}", problemDetail, e);
+		
+		var apiResponse = new ApiResponse<>(
+				-1, false, problemDetail);
+		return ResponseEntity.status(problemDetail.getStatus())
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(apiResponse);
 	}
 	
-	@ExceptionHandler(value = {
-		BusinessException.class,
-		RuntimeException.class
-	})
-	public <T extends BusinessException> ResponseEntity<ApiResponse<ExceptionMsg>> handleBusinessException(final T e) {
-		log.info("** Handle API request custom exception.. *");
+	@ExceptionHandler(ObjectNotFoundException.class)
+	<T extends ObjectNotFoundException> ResponseEntity<ApiResponse<ProblemDetail>> handleObjectNotFoundException(
+																				T e, HttpServletRequest request) {
+		log.info("Handling not-found exception..");
 		
-		final var httpStatus = HttpStatus.BAD_REQUEST;
-		final var exceptionMsg = new ExceptionMsg("#### %s! ####".formatted(e.getMessage()));
-		final var apiResponse = new ApiResponse<>(1, httpStatus, false, exceptionMsg);
+		var problemDetail = ProblemDetail.forStatusAndDetail(
+				HttpStatus.NOT_FOUND, 
+				"#### %s! ####".formatted(e.getMessage()));
+		problemDetail.setType(URI.create(e.getClass().getSimpleName()));
+		problemDetail.setInstance(URI.create(request.getRequestURI()));
+		log.error("Processing problemDetail: {}", problemDetail, e);
 		
-		return ResponseEntity.status(httpStatus)
+		var apiResponse = new ApiResponse<>(
+				-1, false, problemDetail);
+		
+		return ResponseEntity.status(problemDetail.getStatus())
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(apiResponse);
+	}
+	
+	@ExceptionHandler(BusinessException.class)
+	<T extends BusinessException> ResponseEntity<ApiResponse<ProblemDetail>> handleBusinessException(
+																				T e, HttpServletRequest request) {
+		log.info("Handling business exception..");
+		
+		var problemDetail = ProblemDetail.forStatusAndDetail(
+				HttpStatus.BAD_REQUEST, 
+				"#### %s! ####".formatted(e.getMessage()));
+		problemDetail.setType(URI.create(e.getClass().getSimpleName()));
+		problemDetail.setInstance(URI.create(request.getRequestURI()));
+		log.error("Processing problemDetail: {}", problemDetail, e);
+		
+		var apiResponse = new ApiResponse<>(
+				-1, false, problemDetail);
+		
+		return ResponseEntity.status(problemDetail.getStatus())
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(apiResponse);
 	}
 	
 	@ExceptionHandler
-	public ResponseEntity<ApiResponse<ProblemDetail>> handleException(final Exception e) {
-		log.info("** Handle API request custom exception.. *");
+	ResponseEntity<ApiResponse<ProblemDetail>> handleException(HttpServletRequest request, Exception e) {
+		log.info("Handling general exception..");
 		
-		final var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		problemDetail.setProperty("errorMsg", problemDetail.getDetail());
+		var problemDetail = ProblemDetail.forStatusAndDetail(
+				HttpStatus.INTERNAL_SERVER_ERROR, 
+				"#### %s! ####".formatted("Service temporarily unavailable please try later"));
+		problemDetail.setType(URI.create(e.getClass().getSimpleName()));
+		problemDetail.setInstance(URI.create(request.getRequestURI()));
+		problemDetail.setProperty("defaultMessage", e.getMessage());
+		log.error("Processing problemDetail: {}", problemDetail, e);
 		
 		return ResponseEntity.status(problemDetail.getStatus())
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(ApiResponse.of5xxMono(problemDetail));
+				.body(new ApiResponse<>(-1, false, problemDetail));
 	}
 	
 }
-
 
 
 

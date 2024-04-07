@@ -22,7 +22,7 @@ class ManagerWorkerInfoServiceImpl implements ManagerWorkerInfoService {
 	
 	@Override
 	public ManagerWorkerInfoResponse fetchAllSubWorkers(final String username) {
-		log.info("** Fetch all sub workers by manager.. *");
+		log.info("Fetch all sub workers by manager.. ");
 		final var managerDto = this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(username)
 				.map(EmployeeMapper::toDto)
@@ -37,7 +37,7 @@ class ManagerWorkerInfoServiceImpl implements ManagerWorkerInfoService {
 	
 	@Override
 	public EmployeeDto fetchWorkerInfo(final Integer workerId) {
-		log.info("** Fetch worker info.. *");
+		log.info("Fetch worker info.. ");
 		return this.employeeRepository.findById(workerId)
 				.map(EmployeeMapper::toDto)
 				.orElseThrow(EmployeeNotFoundException::new);

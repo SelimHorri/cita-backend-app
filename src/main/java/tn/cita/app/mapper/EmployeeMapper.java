@@ -1,5 +1,7 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Employee;
 import tn.cita.app.model.domain.entity.Saloon;
@@ -11,7 +13,8 @@ import tn.cita.app.model.dto.UserImageDto;
 
 import java.util.Objects;
 
-public interface EmployeeMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class EmployeeMapper {
 	
 	public static EmployeeDto toDto(@NonNull final Employee employee) {
 		

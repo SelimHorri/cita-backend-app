@@ -33,23 +33,23 @@ class RegistrationServiceImpl implements RegistrationService {
 	
 	@Override
 	public RegisterResponse register(final RegisterRequest registerRequest) {
-		log.info("** Register..*");
+		log.info("Register..");
 		
 		if (!isValidRole(registerRequest.role()))
 			throw new IllegalRoleTypeException("Wrong role type for registration, "
 											   + "it should be Customer/Worker/Manager/Owner role");
-		log.info("** User role checked successfully! *");
+		log.info("User role checked successfully! ");
 		
 		this.credentialRepository
 				.findByUsernameIgnoreCase(registerRequest.username()).ifPresent(c -> {
 			throw new UsernameAlreadyExistsException(
 					"Account with username: %s already exists".formatted(c.getUsername()));
 		});
-		log.info("** User not exist by username checked successfully! *");
+		log.info("User not exist by username checked successfully! ");
 		
 		if (!registerRequest.password().equals(registerRequest.confirmPassword()))
 			throw new PasswordNotMatchException("Passwords do not match! please check again");
-		log.info("** User password confirmation checked successfully! *");
+		log.info("User password confirmation checked successfully! ");
 		
 		return switch (UserRoleBasedAuthority.valueOf(registerRequest.role())) {
 			case CUSTOMER -> this.registrationHelper.registerCustomer(registerRequest);
@@ -66,7 +66,7 @@ class RegistrationServiceImpl implements RegistrationService {
 	
 	@Override
 	public String validateToken(final String token) {
-		log.info("** Validate registration token..*");
+		log.info("Validate registration token..");
 		
 		// fetch verificationToken by provided token
 		final var verificationToken = this.verificationTokenRepository.findByToken(token)
@@ -84,11 +84,11 @@ class RegistrationServiceImpl implements RegistrationService {
 		final var credential = verificationToken.getCredential();
 		credential.setIsEnabled(true);
 		this.credentialRepository.save(credential);
-		log.info("** User enabled successfully! *");
+		log.info("User enabled successfully! ");
 		
 		// token should be deleted also after activating user to prevent re-access to url token
 		this.verificationTokenRepository.deleteByToken(token);
-		log.info("** User token has been deleted! *");
+		log.info("User token has been deleted! ");
 		
 		return "User has been activated successfully, go and login!";
 	}
@@ -101,7 +101,7 @@ class RegistrationServiceImpl implements RegistrationService {
 	 */
 	@Override
 	public RegisterResponse resendToken(final String username) {
-		log.info("** resend token **");
+		log.info("resend token");
 		
 		final var credential = this.credentialRepository.findByUsernameIgnoreCase(username)
 				.orElseThrow(() -> new CredentialNotFoundException(

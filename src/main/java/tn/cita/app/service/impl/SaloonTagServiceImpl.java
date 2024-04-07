@@ -21,7 +21,7 @@ class SaloonTagServiceImpl implements SaloonTagService {
 	
 	@Override
 	public List<SaloonTagDto> findAllBySaloonId(final Integer saloonId) {
-		log.info("** Find all saloonTags by saloonId.. *");
+		log.info("Find all saloonTags by saloonId.. ");
 		return this.saloonTagRepository
 				.findAllBySaloonId(saloonId).stream()
 					.map(SaloonTagMapper::toDto)

@@ -1,10 +1,13 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Location;
 import tn.cita.app.model.dto.LocationDto;
 
-public interface LocationMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LocationMapper {
 	
 	public static LocationDto toDto(@NonNull final Location location) {
 		return LocationDto.builder()

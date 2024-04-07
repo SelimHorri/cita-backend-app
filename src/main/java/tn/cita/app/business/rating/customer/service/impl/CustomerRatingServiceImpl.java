@@ -24,7 +24,7 @@ class CustomerRatingServiceImpl implements CustomerRatingService {
 	
 	@Override
 	public CustomerRatingResponse fetchAllRatings(final String username) {
-		log.info("** Fetch all ratings by customer.. *\n");
+		log.info("Fetch all ratings by customer.. *\n");
 		final var customerDto = this.customerRepository
 				.findByCredentialUsernameIgnoringCase(username)
 				.map(CustomerMapper::toDto)

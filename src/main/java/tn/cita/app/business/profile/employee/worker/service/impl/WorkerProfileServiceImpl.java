@@ -29,7 +29,7 @@ class WorkerProfileServiceImpl implements WorkerProfileService {
 	
 	@Override
 	public WorkerProfileResponse fetchProfile(final String username) {
-		log.info("** Fetch worker profile.. *\n");
+		log.info("Fetch worker profile.. *\n");
 		final var workerDto = this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(username)
 				.map(EmployeeMapper::toDto)
@@ -44,7 +44,7 @@ class WorkerProfileServiceImpl implements WorkerProfileService {
 	@Transactional
 	@Override
 	public EmployeeDto updateProfileInfo(final WorkerProfileRequest workerProfileRequest) {
-		log.info("** Update worker profile.. *\n");
+		log.info("Update worker profile.. *\n");
 
 		this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(workerProfileRequest.username().strip())

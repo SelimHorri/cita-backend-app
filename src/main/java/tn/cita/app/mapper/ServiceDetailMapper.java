@@ -1,11 +1,14 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.ServiceDetail;
 import tn.cita.app.model.dto.CategoryDto;
 import tn.cita.app.model.dto.ServiceDetailDto;
 
-public interface ServiceDetailMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ServiceDetailMapper {
 	
 	public static ServiceDetailDto toDto(@NonNull final ServiceDetail serviceDetail) {
 		return ServiceDetailDto.builder()

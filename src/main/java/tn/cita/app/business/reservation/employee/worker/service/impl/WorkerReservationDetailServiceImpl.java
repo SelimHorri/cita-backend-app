@@ -27,7 +27,7 @@ class WorkerReservationDetailServiceImpl implements WorkerReservationDetailServi
 	
 	@Override
 	public ReservationDetailResponse fetchReservationDetails(final Integer reservationId) {
-		log.info("** Fetch reservation details by reservationId by worker.. *");
+		log.info("Fetch reservation details by reservationId by worker.. ");
 		final var reservationDto = this.reservationRepository.findById(reservationId)
 				.map(ReservationMapper::toDto)
 				.orElseThrow(ReservationNotFoundException::new);

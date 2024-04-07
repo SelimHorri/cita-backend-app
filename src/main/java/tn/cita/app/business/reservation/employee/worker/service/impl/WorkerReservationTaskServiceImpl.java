@@ -35,7 +35,7 @@ class WorkerReservationTaskServiceImpl implements WorkerReservationTaskService {
 	
 	@Override
 	public TaskDto fetchAssignedTask(final String username, final Integer reservationId) {
-		log.info("** Fetch assigned task by worker.. *");
+		log.info("Fetch assigned task by worker.. ");
 		final var workerDto = this.retrieveWorkerByUsername(username);
 		return this.taskRepository
 				.findById(new TaskId(workerDto.getId(), reservationId))
@@ -46,7 +46,7 @@ class WorkerReservationTaskServiceImpl implements WorkerReservationTaskService {
 	@Transactional
 	@Override
 	public TaskDto updateDescription(final TaskUpdateDescriptionRequest taskUpdateDescriptionRequest) {
-		log.info("** Update description by worker.. *");
+		log.info("Update description by worker.. ");
 		
 		final var workerDto = this.retrieveWorkerByUsername(taskUpdateDescriptionRequest.username());
 		
@@ -71,7 +71,7 @@ class WorkerReservationTaskServiceImpl implements WorkerReservationTaskService {
 	@Transactional
 	@Override
 	public TaskDto beginTask(final TaskBeginEndRequest taskBeginRequest) {
-		log.info("** Begin task by worker.. *");
+		log.info("Begin task by worker.. ");
 		
 		final var workerDto = this.retrieveWorkerByUsername(taskBeginRequest.username());
 		
@@ -111,7 +111,7 @@ class WorkerReservationTaskServiceImpl implements WorkerReservationTaskService {
 	@Transactional
 	@Override
 	public TaskDto endTask(final TaskBeginEndRequest taskEndRequest) {
-		log.info("** End task by worker.. *");
+		log.info("End task by worker.. ");
 		
 		final var workerDto = this.retrieveWorkerByUsername(taskEndRequest.username());
 		

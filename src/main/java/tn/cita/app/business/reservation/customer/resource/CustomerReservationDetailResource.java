@@ -2,9 +2,8 @@ package tn.cita.app.business.reservation.customer.resource;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.reservation.customer.service.CustomerReservationDetailService;
@@ -16,39 +15,34 @@ import tn.cita.app.util.UserRequestExtractorUtil;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/customers/reservations/details")
-@Slf4j
 @RequiredArgsConstructor
-public class CustomerReservationDetailResource {
+class CustomerReservationDetailResource {
 	
 	@Qualifier("customerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final CustomerReservationDetailService customerReservationDetailService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{reservationId}")
-	public ResponseEntity<ApiResponse<ReservationDetailResponse>> fetchReservationDetails(
-					final WebRequest request, @PathVariable final String reservationId) {
-		log.info("** Fetch customer reservation details.. *");
+	ApiResponse<ReservationDetailResponse> fetchReservationDetails(WebRequest request, @PathVariable String reservationId) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.customerReservationDetailService.fetchReservationDetails(Integer.parseInt(reservationId))));
+		return ApiResponse.of(this.customerReservationDetailService.fetchReservationDetails(Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/identifier/{reservationIdentifier}")
-	public ResponseEntity<ApiResponse<ReservationDetailResponse>> fetchReservationDetailsWithIdentifier(
-					final WebRequest request, @PathVariable final String reservationIdentifier) {
-		log.info("** Fetch customer reservation details.. *");
+	ApiResponse<ReservationDetailResponse> fetchReservationDetailsWithIdentifier(WebRequest request,
+																				 @PathVariable String reservationIdentifier) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.customerReservationDetailService.fetchReservationDetails(reservationIdentifier.strip())));
+		return ApiResponse.of(this.customerReservationDetailService.fetchReservationDetails(reservationIdentifier.strip()));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping
-	public ResponseEntity<ApiResponse<ReservationDto>> updateReservationDetails(
-					final WebRequest request, @RequestBody @Valid final ReservationDetailRequest reservationDetailRequest) {
-		log.info("** Update customer reservation details.. *");
+	ApiResponse<ReservationDto> updateReservationDetails(WebRequest request,
+														 @RequestBody @Valid ReservationDetailRequest reservationDetailRequest) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.customerReservationDetailService.updateReservationDetails(reservationDetailRequest)));
+		return ApiResponse.of(this.customerReservationDetailService.updateReservationDetails(reservationDetailRequest));
 	}
 	
 }

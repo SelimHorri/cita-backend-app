@@ -3,47 +3,47 @@ package tn.cita.app.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import tn.cita.app.model.dto.CredentialDto;
+import tn.cita.app.model.domain.entity.Credential;
 
 import java.util.Collection;
 import java.util.Set;
 
-public record CustomUserDetails(CredentialDto credentialDto) implements UserDetails {
+public record CustomUserDetails(Credential credential) implements UserDetails {
 	
 	@Override
 	public String getUsername() {
-		return this.credentialDto.getUsername();
+		return this.credential.getUsername();
 	}
 	
 	@Override
 	public String getPassword() {
-		return this.credentialDto.getPassword();
+		return this.credential.getPassword();
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Set.of(new SimpleGrantedAuthority(this.credentialDto
-				.getUserRoleBasedAuthority().getRole()));
+		return Set.of(new SimpleGrantedAuthority(
+				this.credential.getUserRoleBasedAuthority().getRole()));
 	}
 	
 	@Override
 	public boolean isEnabled() {
-		return this.credentialDto.getIsEnabled();
+		return this.credential.getIsEnabled();
 	}
 	
 	@Override
 	public boolean isAccountNonExpired() {
-		return this.credentialDto.getIsAccountNonExpired();
+		return this.credential.getIsAccountNonExpired();
 	}
 	
 	@Override
 	public boolean isAccountNonLocked() {
-		return this.credentialDto.getIsAccountNonLocked();
+		return this.credential.getIsAccountNonLocked();
 	}
 	
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return this.credentialDto.getIsCredentialsNonExpired();
+		return this.credential.getIsCredentialsNonExpired();
 	}
 	
 }

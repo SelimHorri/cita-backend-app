@@ -1,5 +1,7 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Category;
 import tn.cita.app.model.dto.CategoryDto;
@@ -7,7 +9,8 @@ import tn.cita.app.model.dto.SaloonDto;
 
 import java.util.Objects;
 
-public interface CategoryMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class CategoryMapper {
 	
 	public static CategoryDto toDto(@NonNull final Category category) {
 		

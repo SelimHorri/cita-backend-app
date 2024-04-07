@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -53,7 +52,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role(UserRoleBasedAuthority.CUSTOMER.name().toUpperCase())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true,
 				new RegisterResponse("""
 					User with username %s has been saved successfully.
 					Check your email to enable your account.
@@ -70,7 +69,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -93,7 +92,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role(UserRoleBasedAuthority.WORKER.name().toUpperCase())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true,
 				new RegisterResponse("""
 					User with username %s has been saved successfully.
 					Check your email to enable your account.
@@ -110,7 +109,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -133,7 +132,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role(UserRoleBasedAuthority.MANAGER.name().toUpperCase())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true,
 				new RegisterResponse("""
 					User with username %s has been saved successfully.
 					Check your email to enable your account.
@@ -150,7 +149,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -173,7 +172,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role(UserRoleBasedAuthority.OWNER.name().toUpperCase())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true,
 				new RegisterResponse("""
 					User with username %s has been saved successfully.
 					Check your email to enable your account.
@@ -190,7 +189,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -213,7 +212,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role("XXX")
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, false,
 				new ExceptionMsg("#### Wrong role type for registration, it should be Customer/Worker/Manager/Owner role! ####"));
 		
 		this.webTestClient
@@ -226,7 +225,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.isBadRequest()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -250,7 +249,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role(UserRoleBasedAuthority.WORKER.name())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, false,
 				new ExceptionMsg("#### Account with username: " + registerRequest.username() + " already exists! ####"));
 		
 		this.webTestClient
@@ -263,7 +262,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.isBadRequest()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -287,7 +286,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.role(UserRoleBasedAuthority.CUSTOMER.name())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, false,
 				new ExceptionMsg("#### Passwords do not match! please check again! ####"));
 		
 		this.webTestClient
@@ -300,7 +299,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 				.expectStatus()
 					.isBadRequest()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -313,7 +312,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 		
 		final var token = "c856b457-ed66-4dd4-bc1a-f0be552a28e5";
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, 
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true, 
 				"User has been activated successfully, go and login!");
 		
 		this.webTestClient
@@ -324,7 +323,7 @@ class RegistrationResourceIntegrationTest extends AbstractSharedMySQLTestContain
 					.is2xxSuccessful()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody").value(is(expectedApiPayloadResponse.responseBody()));

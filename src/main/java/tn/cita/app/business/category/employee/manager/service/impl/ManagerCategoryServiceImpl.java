@@ -32,7 +32,7 @@ class ManagerCategoryServiceImpl implements ManagerCategoryService {
 	
 	@Override
 	public Page<CategoryDto> fetchAll(final String username) {
-		log.info("** Fetch all categories by manager.. *");
+		log.info("Fetch all categories by manager.. ");
 		
 		final var manager = this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(username.strip())
@@ -48,7 +48,7 @@ class ManagerCategoryServiceImpl implements ManagerCategoryService {
 	
 	@Override
 	public CategoryDto fetchById(final Integer categoryId) {
-		log.info("** Fetch category by id by manager.. *");
+		log.info("Fetch category by id by manager.. ");
 		return this.categoryRepository.findById(categoryId)
 				.map(CategoryMapper::toDto)
 				.orElseThrow(CategoryNotFoundException::new);
@@ -57,7 +57,7 @@ class ManagerCategoryServiceImpl implements ManagerCategoryService {
 	@Transactional
 	@Override
 	public Boolean deleteCategory(final Integer categoryId) {
-		log.info("** Delete category by id by manager.. *");
+		log.info("Delete category by id by manager.. ");
 		this.categoryRepository.deleteById(categoryId);
 		return !this.categoryRepository.existsById(categoryId);
 	}
@@ -65,7 +65,7 @@ class ManagerCategoryServiceImpl implements ManagerCategoryService {
 	@Transactional
 	@Override
 	public CategoryDto saveCategory(final CategoryRequest categoryRequest) {
-		log.info("** Save category by manager.. *");
+		log.info("Save category by manager.. ");
 		
 		final var parentCategory = (categoryRequest.parentCategoryId() != null) ?
 				this.categoryRepository
@@ -88,7 +88,7 @@ class ManagerCategoryServiceImpl implements ManagerCategoryService {
 	@Transactional
 	@Override
 	public CategoryDto updateCategory(final CategoryRequest categoryRequest) {
-		log.info("** Update category by manager.. *");
+		log.info("Update category by manager.. ");
 		
 		final var parentCategory = (categoryRequest.parentCategoryId() != null) ?
 				this.categoryRepository

@@ -28,7 +28,7 @@ class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public List<CategoryDto> findAll() {
-		log.info("** Find all categories.. *");
+		log.info("Find all categories.. ");
 		return this.categoryRepository.findAll().stream()
 				.map(CategoryMapper::toDto)
 				.toList();
@@ -36,7 +36,7 @@ class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public CategoryDto findById(final Integer id) {
-		log.info("** Find category by id.. *");
+		log.info("Find category by id.. ");
 		return this.categoryRepository.findById(id)
 				.map(CategoryMapper::toDto)
 				.orElseThrow(CategoryNotFoundException::new);
@@ -51,7 +51,7 @@ class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public List<CategoryDto> findAllBySaloonId(final Integer saloonId) {
-		log.info("** Find all categories by saloonId.. *");
+		log.info("Find all categories by saloonId.. ");
 		return this.categoryRepository.findAllBySaloonId(saloonId).stream()
 				.map(CategoryMapper::toDto)
 				.sorted(Comparator.comparing(CategoryDto::getName))
@@ -61,7 +61,7 @@ class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	@Override
 	public CategoryDto save(final CategoryRequest categoryRequest) {
-		log.info("** Save a category.. *");
+		log.info("Save a category.. ");
 		
 		final var parentCategory = Optional.ofNullable(categoryRequest.parentCategoryId()).isPresent() ?
 				this.categoryRepository
@@ -84,7 +84,7 @@ class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	@Override
 	public CategoryDto update(final CategoryRequest categoryRequest) {
-		log.info("** Update a category.. *");
+		log.info("Update a category.. ");
 		
 		final var parentCategory = Optional.ofNullable(categoryRequest.parentCategoryId()).isPresent() ?
 				this.categoryRepository

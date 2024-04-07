@@ -2,9 +2,8 @@ package tn.cita.app.business.reservation.employee.manager.resource;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import tn.cita.app.business.reservation.employee.manager.model.ManagerReservationResponse;
@@ -20,69 +19,60 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${app.api-version}" + "/employees/managers/reservations")
-@Slf4j
 @RequiredArgsConstructor
-public class ManagerReservationResource {
+class ManagerReservationResource {
 	
 	@Qualifier("managerRequestExtractorUtil")
 	private final UserRequestExtractorUtil userRequestExtractorUtil;
 	private final ManagerReservationService managerReservationService;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/all")
-	public ResponseEntity<ApiResponse<ManagerReservationResponse>> fetchAllReservations(final WebRequest webRequest) {
-		log.info("** Fetch all reservations by manager.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.managerReservationService.fetchAllReservations(
-						this.userRequestExtractorUtil.extractUsername(webRequest))));
+	ApiResponse<ManagerReservationResponse> fetchAllReservations(WebRequest webRequest) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(this.managerReservationService.fetchAllReservations(extractUsername));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/paged")
-	public ResponseEntity<ApiResponse<ManagerReservationResponse>> fetchAllReservations(
-					final WebRequest webRequest, @RequestParam final Map<String, String> params) {
-		log.info("** Fetch all paged reservations by manager.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
+	ApiResponse<ManagerReservationResponse> fetchAllReservations(WebRequest webRequest, @RequestParam Map<String, String> params) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of( 
 				this.managerReservationService.fetchAllReservations(
-						this.userRequestExtractorUtil.extractUsername(webRequest), 
-						ClientPageRequest.from(params))));
+						extractUsername,
+						ClientPageRequest.from(params)));
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping("/cancel/{reservationId}")
-	public ResponseEntity<ApiResponse<ReservationDto>> cancelReservation(
-					final WebRequest request, @PathVariable final String reservationId) {
-		log.info("** Cancel reservation by manager.. *");
+	ApiResponse<ReservationDto> cancelReservation(WebRequest request, @PathVariable String reservationId) {
 		this.userRequestExtractorUtil.extractUsername(request);
-		return ResponseEntity.ok(ApiResponse.of2xxMono( 
-				this.managerReservationService.cancelReservation(Integer.parseInt(reservationId))));
+		return ApiResponse.of(this.managerReservationService.cancelReservation(Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/search/{key}")
-	public ResponseEntity<ApiResponse<ManagerReservationResponse>> searchAllBySaloonIdLikeKey(
-					final WebRequest webRequest, @PathVariable final String key) {
-		log.info("** Search all reservations by saloonId by manager.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.managerReservationService.searchAllBySaloonIdLikeKey(
-						this.userRequestExtractorUtil.extractUsername(webRequest), key)));
+	ApiResponse<ManagerReservationResponse> searchAllBySaloonIdLikeKey(WebRequest webRequest, @PathVariable String key) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(this.managerReservationService.searchAllBySaloonIdLikeKey(extractUsername, key));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/{reservationId}/unassigned")
-	public ResponseEntity<ApiResponse<ReservationSubWorkerResponse>> fetchAllUnassignedSubWorkers(
-					final WebRequest webRequest, @PathVariable final String reservationId) {
-		log.info("** Fetch all unassigned sub workers by manager.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
+	ApiResponse<ReservationSubWorkerResponse> fetchAllUnassignedSubWorkers(WebRequest webRequest, @PathVariable String reservationId) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(
 				this.managerReservationService.fetchAllUnassignedSubWorkers(
-						this.userRequestExtractorUtil.extractUsername(webRequest), 
-						Integer.parseInt(reservationId))));
+						extractUsername,
+						Integer.parseInt(reservationId)));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/assign")
-	public ResponseEntity<ApiResponse<ReservationSubWorkerResponse>> assignReservationWorkers(
-					final WebRequest webRequest, 
-					@RequestBody @Valid final ReservationAssignWorkerRequest reservationAssignWorkerRequest) {
-		log.info("** Assign workers to a reservation by manager.. *");
-		return ResponseEntity.ok(ApiResponse.of2xxMono(
-				this.managerReservationService.assignReservationWorkers(
-						this.userRequestExtractorUtil.extractUsername(webRequest),
-						reservationAssignWorkerRequest)));
+	ApiResponse<ReservationSubWorkerResponse> assignReservationWorkers(WebRequest webRequest,
+																	   @RequestBody @Valid ReservationAssignWorkerRequest assignWorkerRequest) {
+		var extractUsername = this.userRequestExtractorUtil.extractUsername(webRequest);
+		return ApiResponse.of(this.managerReservationService.assignReservationWorkers(extractUsername,assignWorkerRequest));
 	}
 	
 }

@@ -39,7 +39,7 @@ class ReservationCommonServiceImpl implements ReservationCommonService {
 	@Transactional
 	@Override
 	public ReservationDto cancelReservation(final Integer reservationId) {
-		log.info("** Cancelling reservation.. *");
+		log.info("Cancelling reservation.. ");
 		
 		final var reservation = this.reservationRepository.findById(reservationId)
 				.orElseThrow(ReservationNotFoundException::new);
@@ -62,7 +62,7 @@ class ReservationCommonServiceImpl implements ReservationCommonService {
 	
 	@Override
 	public ReservationSubWorkerResponse fetchAllUnassignedSubWorkers(final String username, final Integer reservationId) {
-		log.info("** Fetch all unassigned sub workers.. *");
+		log.info("Fetch all unassigned sub workers.. ");
 		
 		final var managerDto = this.employeeRepository
 				.findByCredentialUsernameIgnoringCase(username)
@@ -92,7 +92,7 @@ class ReservationCommonServiceImpl implements ReservationCommonService {
 	@Override
 	public ReservationSubWorkerResponse assignReservationWorkers(final String username, 
 			final ReservationAssignWorkerRequest reservationAssignWorkerRequest) {
-		log.info("** Assign workers to a reservation.. *");
+		log.info("Assign workers to a reservation.. ");
 		
 		final var reservation = this.reservationRepository
 				.findById(reservationAssignWorkerRequest.reservationId())

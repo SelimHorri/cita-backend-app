@@ -1,10 +1,13 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.UserImage;
 import tn.cita.app.model.dto.UserImageDto;
 
-public interface UserImageMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class UserImageMapper {
 	
 	public static UserImageDto toDto(@NonNull final UserImage userImage) {
 		return UserImageDto.builder()

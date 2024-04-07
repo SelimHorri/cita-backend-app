@@ -1,12 +1,15 @@
 package tn.cita.app.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tn.cita.app.model.domain.entity.Favourite;
 import tn.cita.app.model.dto.CustomerDto;
 import tn.cita.app.model.dto.FavouriteDto;
 import tn.cita.app.model.dto.SaloonDto;
 
-public interface FavouriteMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class FavouriteMapper {
 	
 	public static FavouriteDto toDto(@NonNull final Favourite favourite) {
 		return FavouriteDto.builder()

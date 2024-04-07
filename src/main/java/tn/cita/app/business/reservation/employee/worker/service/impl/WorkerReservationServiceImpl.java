@@ -28,7 +28,7 @@ class WorkerReservationServiceImpl implements WorkerReservationService {
 	
 	@Override
 	public Page<TaskDto> fetchAllReservations(final String username, final ClientPageRequest clientPageRequest) {
-		log.info("** Fetch all paged reservations by worker.. *");
+		log.info("Fetch all paged reservations by worker.. ");
 		final var workerDto = this.retrieveWorkerByUsername(username.strip());
 		return this.taskRepository
 				.findAllByWorkerId(workerDto.getId(), ClientPageRequestUtils.from(clientPageRequest))
@@ -37,7 +37,7 @@ class WorkerReservationServiceImpl implements WorkerReservationService {
 	
 	@Override
 	public Page<TaskDto> fetchAllReservations(final String username) {
-		log.info("** Fetch all reservations by worker.. *");
+		log.info("Fetch all reservations by worker.. ");
 		final var workerDto = this.retrieveWorkerByUsername(username.strip());
 		return new PageImpl<>(this.taskRepository.findAllByWorkerId(workerDto.getId()))
 				.map(TaskMapper::toDto);
@@ -45,7 +45,7 @@ class WorkerReservationServiceImpl implements WorkerReservationService {
 	
 	@Override
 	public Page<TaskDto> searchAllLikeKey(final String username, final String key) {
-		log.info("** Search all reservations like key by worker.. *");
+		log.info("Search all reservations like key by worker.. ");
 		final var workerDto = this.retrieveWorkerByUsername(username.strip());
 		return new PageImpl<>(this.taskRepository
 				.searchAllByWorkerIdLikeKey(workerDto.getId(), key.strip().toLowerCase()).stream()

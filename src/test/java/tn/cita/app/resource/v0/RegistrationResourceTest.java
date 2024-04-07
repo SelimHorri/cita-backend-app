@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -67,7 +66,7 @@ class RegistrationResourceTest {
 						+ "Please consider that link will expire after %dmin from registration", 
 						registerRequest.username(), 
 						AppConstants.USER_EXPIRES_AFTER_MINUTES));
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, 
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true, 
 				registerResponse);
 		
 		when(this.registrationService.register(registerRequest))
@@ -83,7 +82,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -112,7 +111,7 @@ class RegistrationResourceTest {
 						+ "Please consider that link will expire after %dmin from registration", 
 						registerRequest.username(), 
 						AppConstants.USER_EXPIRES_AFTER_MINUTES));
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, 
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true, 
 				registerResponse);
 		
 		when(this.registrationService.register(registerRequest))
@@ -128,7 +127,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -157,7 +156,7 @@ class RegistrationResourceTest {
 						+ "Please consider that link will expire after %dmin from registration", 
 						registerRequest.username(), 
 						AppConstants.USER_EXPIRES_AFTER_MINUTES));
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, 
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true, 
 				registerResponse);
 		
 		when(this.registrationService.register(registerRequest))
@@ -173,7 +172,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -202,7 +201,7 @@ class RegistrationResourceTest {
 						+ "Please consider that link will expire after %dmin from registration", 
 						registerRequest.username(), 
 						AppConstants.USER_EXPIRES_AFTER_MINUTES));
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, 
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true, 
 				registerResponse);
 		
 		when(this.registrationService.register(registerRequest))
@@ -218,7 +217,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.is2xxSuccessful()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.isSuccess").value(is(expectedApiPayloadResponse.responseBody().isSuccess()))
@@ -241,7 +240,7 @@ class RegistrationResourceTest {
 				.role("XXX")
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, false,
 				new ExceptionMsg("#### Wrong role type for registration, it should be Customer/Worker/Manager/Owner role! ####"));
 		
 		when(this.registrationService.register(registerRequest))
@@ -257,7 +256,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.isBadRequest()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -281,7 +280,7 @@ class RegistrationResourceTest {
 				.role(UserRoleBasedAuthority.WORKER.name())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, false,
 				new ExceptionMsg("#### Account with username: " + registerRequest.username() + " already exists! ####"));
 		
 		when(this.registrationService.register(registerRequest))
@@ -297,7 +296,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.isBadRequest()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -321,7 +320,7 @@ class RegistrationResourceTest {
 				.role(UserRoleBasedAuthority.CUSTOMER.name())
 				.build();
 		
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.BAD_REQUEST, false,
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, false,
 				new ExceptionMsg("#### Unmatched passwords! please check again! ####"));
 		
 		when(this.registrationService.register(registerRequest))
@@ -337,7 +336,7 @@ class RegistrationResourceTest {
 				.expectStatus()
 					.isBadRequest()
 				.expectBody()
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody.errorMsg").value(startsWith("#### "))
@@ -349,7 +348,7 @@ class RegistrationResourceTest {
 	void givenValidToken_whenValidateToken_thenConfirmationMsgStringShouldBeReturned() {
 		
 		final var token = "c856b457-ed66-4dd4-bc1a-f0be552a28e5";
-		final var expectedApiPayloadResponse = new ApiResponse<>(1, HttpStatus.OK, true, 
+		final var expectedApiPayloadResponse = new ApiResponse<>(-1, true, 
 				"User has been activated successfully, go and login!");
 		
 		when(this.registrationService.validateToken(token))
@@ -363,7 +362,7 @@ class RegistrationResourceTest {
 					.is2xxSuccessful()
 				.expectBody()
 					.jsonPath("$").value(notNullValue())
-					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.totalResult()))
+					.jsonPath("$.totalResult").value(is(expectedApiPayloadResponse.total()))
 					.jsonPath("$.acknowledge").value(is(expectedApiPayloadResponse.acknowledge()))
 					.jsonPath("$.responseBody").value(notNullValue())
 					.jsonPath("$.responseBody").value(is(expectedApiPayloadResponse.responseBody()));

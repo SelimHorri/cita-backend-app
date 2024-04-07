@@ -26,7 +26,7 @@ class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public TaskDto findById(final TaskId taskId) {
-		log.info("** Find task by id.. *");
+		log.info("Find task by id.. ");
 		return this.taskRepository.findById(taskId)
 				.map(TaskMapper::toDto)
 				.orElseThrow(TaskNotFoundException::new);
@@ -41,7 +41,7 @@ class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public List<TaskDto> findAllByReservationId(final Integer reservationId) {
-		log.info("** Find all tasks by reservationId.. *");
+		log.info("Find all tasks by reservationId.. ");
 		return this.taskRepository
 				.findAllByReservationId(reservationId).stream()
 					.map(TaskMapper::toDto)
@@ -50,7 +50,7 @@ class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public List<TaskDto> findAllByWorkerId(final Integer workerId) {
-		log.info("** Find all tasls by workerId.. *");
+		log.info("Find all tasls by workerId.. ");
 		return this.taskRepository
 				.findAllByWorkerId(workerId).stream()
 					.map(TaskMapper::toDto)
@@ -59,7 +59,7 @@ class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public Page<TaskDto> findAllByWorkerId(final Integer workerId, final ClientPageRequest clientPageRequest) {
-		log.info("** Find all paged tasks by workerId.. *");
+		log.info("Find all paged tasks by workerId.. ");
 		return this.taskRepository.findAllByWorkerId(
 					workerId, ClientPageRequestUtils.from(clientPageRequest))
 				.map(TaskMapper::toDto);

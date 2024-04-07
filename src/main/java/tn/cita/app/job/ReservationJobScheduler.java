@@ -36,7 +36,7 @@ public class ReservationJobScheduler {
 					.map(this::markOutdated)
 					.distinct()
 					.map(this.reservationRepository::save)
-					.peek(r -> log.info("** Reservation with code {} has been switched to {} **", 
+					.peek(r -> log.info("Reservation with code {} has been switched to {}", 
 							r.getCode(), r.getStatus().name()))
 					.count();
 		log.info("All {} not-started reservations of yesterday {} has been marked as OUTDATED at {}", 
@@ -61,7 +61,7 @@ public class ReservationJobScheduler {
 					.map(this::markNotClosed)
 					.distinct()
 					.map(this.reservationRepository::save)
-					.peek(r -> log.info("** Reservation with code {} has been switched to {} **", 
+					.peek(r -> log.info("Reservation with code {} has been switched to {}", 
 							r.getCode(), r.getStatus().name()))
 					.count();
 		log.info("All {} in-progress reservations of yesterday {} has been marked as NOT_CLOSED at {}", 

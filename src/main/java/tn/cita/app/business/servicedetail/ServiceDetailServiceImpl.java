@@ -40,7 +40,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public List<ServiceDetailDto> findAll() {
-		log.info("** Find all service details.. *");
+		log.info("Find all service details.. ");
 		return this.serviceDetailRepository.findAll().stream()
 				.map(ServiceDetailMapper::toDto)
 				.distinct()
@@ -49,7 +49,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public ServiceDetailDto findById(final Integer id) {
-		log.info("** Find service detail by id.. *");
+		log.info("Find service detail by id.. ");
 		return this.serviceDetailRepository.findById(id)
 				.map(ServiceDetailMapper::toDto)
 				.orElseThrow(ServiceDetailNotFoundException::new);
@@ -64,7 +64,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public Page<ServiceDetailDto> findAllByIds(final Set<Integer> ids) {
-		log.info("** Find all service details by ids.. *");
+		log.info("Find all service details by ids.. ");
 		return new PageImpl<>(this.serviceDetailRepository
 				.findAllById(ids).stream()
 				.map(ServiceDetailMapper::toDto)
@@ -73,7 +73,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public ServiceDetailsReservationContainerResponse fetchOrderedServiceDetails(final Integer reservationId) {
-		log.info("** Fetch ordered service details by reservationId.. *");
+		log.info("Fetch ordered service details by reservationId.. ");
 		
 		final var orderedDetailDtos = this.orderedDetailRepository
 				.findAllByReservationId(reservationId).stream()
@@ -88,7 +88,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public ServiceDetailsReservationContainerResponse fetchOrderedServiceDetails(final String reservationIdentifier) {
-		log.info("** Fetch ordered service details by reservationIdentifier.. *");
+		log.info("Fetch ordered service details by reservationIdentifier.. ");
 		
 		final var reservationDto = this.reservationRepository
 				.findByIdentifier(reservationIdentifier)
@@ -108,7 +108,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public Page<ServiceDetailDto> findAllByCategoryId(final Integer categoryId) {
-		log.info("** Find all service details by categoryId.. *");
+		log.info("Find all service details by categoryId.. ");
 		return new PageImpl<>(this.serviceDetailRepository
 				.findAllByCategoryId(categoryId).stream()
 					.map(ServiceDetailMapper::toDto)
@@ -117,7 +117,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	
 	@Override
 	public List<ServiceDetailDto> findAllByCategorySaloonId(final Integer saloonId) {
-		log.info("** Find all service details by category saloonId.. *");
+		log.info("Find all service details by category saloonId.. ");
 		return this.serviceDetailRepository
 				.findAllByCategorySaloonId(saloonId).stream()
 					.map(ServiceDetailMapper::toDto)
@@ -131,7 +131,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	@Transactional
 	@Override
 	public ServiceDetailDto save(final ServiceDetailRequest serviceDetailRequest) {
-		log.info("** Save new service detail.. *");
+		log.info("Save new service detail.. ");
 		
 		final var category = this.categoryRepository.findById(serviceDetailRequest.getCategoryId())
 				.orElseThrow(CategoryNotFoundException::new);
@@ -153,7 +153,7 @@ class ServiceDetailServiceImpl implements ServiceDetailService {
 	@Transactional
 	@Override
 	public ServiceDetailDto update(final ServiceDetailRequest serviceDetailRequest) {
-		log.info("** Update a service detail.. *");
+		log.info("Update a service detail.. ");
 		
 		final var category = this.categoryRepository.findById(serviceDetailRequest.getCategoryId())
 				.orElseThrow(CategoryNotFoundException::new);

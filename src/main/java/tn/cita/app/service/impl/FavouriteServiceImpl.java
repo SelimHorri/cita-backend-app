@@ -31,7 +31,7 @@ class FavouriteServiceImpl implements FavouriteService {
 	
 	@Override
 	public Page<FavouriteDto> findAllByCustomerId(final Integer customerId, final ClientPageRequest clientPageRequest) {
-		log.info("** Find all favourites by customerId.. *");
+		log.info("Find all favourites by customerId.. ");
 		return this.favouriteRepository.findAllByCustomerId(customerId, 
 					ClientPageRequestUtils.from(clientPageRequest))
 				.map(FavouriteMapper::toDto);
@@ -40,7 +40,7 @@ class FavouriteServiceImpl implements FavouriteService {
 	@Transactional
 	@Override
 	public Boolean deleteById(final FavouriteId favouriteId) {
-		log.info("** Delete favourite by id.. *");
+		log.info("Delete favourite by id.. ");
 		this.favouriteRepository.deleteById(favouriteId);
 		return !this.favouriteRepository.existsById(favouriteId);
 	}

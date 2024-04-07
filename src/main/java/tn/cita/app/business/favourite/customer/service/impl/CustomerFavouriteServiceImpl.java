@@ -35,7 +35,7 @@ class CustomerFavouriteServiceImpl implements CustomerFavouriteService {
 	
 	@Override
 	public CustomerFavouriteResponse fetchAllFavourites(final String username, final ClientPageRequest clientPageRequest) {
-		log.info("** Fetch all favourites by customer.. *");
+		log.info("Fetch all favourites by customer.. ");
 		final var customerDto = this.retrieveCustomerByUsername(username);
 		return new CustomerFavouriteResponse(
 				customerDto,
@@ -47,7 +47,7 @@ class CustomerFavouriteServiceImpl implements CustomerFavouriteService {
 	@Transactional
 	@Override
 	public Boolean deleteFavourite(final String username, final Integer saloonId) {
-		log.info("** Delete favourite by customer.. *");
+		log.info("Delete favourite by customer.. ");
 		final var favouriteId = new FavouriteId(this.retrieveCustomerByUsername(username).getId(), saloonId);
 		this.favouriteRepository.deleteById(favouriteId);
 		return !this.favouriteRepository.existsById(favouriteId);
@@ -56,7 +56,7 @@ class CustomerFavouriteServiceImpl implements CustomerFavouriteService {
 	@Transactional
 	@Override
 	public FavouriteDto addFavourite(final String username, final Integer saloonId) {
-		log.info("** Add new favourite by customer.. *");
+		log.info("Add new favourite by customer.. ");
 		
 		final var customer = this.customerRepository.findByCredentialUsernameIgnoringCase(username)
 				.orElseThrow(() -> new CustomerNotFoundException("Customer with username %s not found".formatted(username)));
